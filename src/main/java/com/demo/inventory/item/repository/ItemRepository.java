@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    Item findByItemId(Long itemId);
+
     List<Item> findAllByUserIdAndFolderId(Long userId, Long folderId);
 
     List<Item> findAllByUserId(Long userId);

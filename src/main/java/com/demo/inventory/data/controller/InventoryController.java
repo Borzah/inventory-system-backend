@@ -22,6 +22,11 @@ public class InventoryController {
         return inventoryService.getContentBySection(user, folder);
     }
 
+    @GetMapping("{itemId}")
+    public ItemResponse getItemResponseByItemId(@PathVariable Long itemId) {
+        return inventoryService.getItemResponseByItemId(itemId);
+    }
+
     @GetMapping("user/{userId}")
     public List<ItemResponse> getAllUsersItemResponses(@PathVariable Long userId,
                                                        @RequestParam(required = false) String search) {

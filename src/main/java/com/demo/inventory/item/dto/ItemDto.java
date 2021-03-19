@@ -19,4 +19,5 @@ public class ItemDto {
     private Date dateAdded;
     private String description;
     private String serialNumber;
+    private Float itemPrice;
 }

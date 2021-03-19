@@ -24,7 +24,8 @@ public class ItemService {
                 categoryId(itemDto.getCategoryId()).
                 description(itemDto.getDescription())
                 .dateAdded(new Date())
-                .serialNumber(itemDto.getSerialNumber()).build();
+                .serialNumber(itemDto.getSerialNumber())
+                .itemPrice(itemDto.getItemPrice()).build();
         return itemRepository.save(item);
     }
 

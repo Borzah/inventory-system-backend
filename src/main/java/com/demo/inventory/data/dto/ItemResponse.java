@@ -20,5 +20,6 @@ public class ItemResponse {
     private Date dateAdded;
     private String description;
     private String serialNumber;
+    private Float itemPrice;
     private byte[] imageBytes;
 }

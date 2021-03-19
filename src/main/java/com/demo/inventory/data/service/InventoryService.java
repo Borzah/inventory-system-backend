@@ -27,6 +27,10 @@ public class InventoryService {
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
 
+    public ItemResponse getItemResponseByItemId(Long itemId) {
+        return createItemResponse(itemRepository.findByItemId(itemId));
+    }
+
     public FolderResponse getContentBySection(Long user, Long folder) {
         List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(user, folder).stream()
                 .map(this::convertFolder)
@@ -107,7 +111,8 @@ public class InventoryService {
                 .description(item.getDescription())
                 .serialNumber(item.getSerialNumber())
                 .categoryName(categoryName)
-                .imageBytes(imageBytes).build();
+                .imageBytes(imageBytes)
+                .itemPrice(item.getItemPrice()).build();
     }
 
     private FolderDto convertFolder(Folder folder) {

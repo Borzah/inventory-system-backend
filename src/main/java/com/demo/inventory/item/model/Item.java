@@ -32,4 +32,6 @@ public class Item {
     private String description;
     @Column(name = "serial_number")
     private String serialNumber;
+    @Column(name = "item_price")
+    private Float itemPrice;
 }
