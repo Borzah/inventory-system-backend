@@ -1,2 +1,2 @@
 ## Backend for inventory application
-Currently in development process.
+Currently in development.
