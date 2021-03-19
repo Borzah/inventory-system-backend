@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,8 @@ public class InventoryService {
             Folder currentFolder = folderRepository.findByFolderId(folder);
             parentFolderId = currentFolder.getParentId();
             currentFolderName = currentFolder.getFolderName();
-            currentFolderPathName = currentFolder.getFolderPathName();
+            List<Folder> possibleParents = folderRepository.findAllByUserIdAndFolderIdIsLessThan(user, folder);
+            currentFolderPathName = getFolderPathName(possibleParents, currentFolder);
         }
         FolderResponse content = new FolderResponse();
         content.setCurrentFolderId(currentFolderId);
@@ -85,6 +87,31 @@ public class InventoryService {
                 item.getSerialNumber() != null && item.getSerialNumber().equalsIgnoreCase(search.toLowerCase());
     }
 
+    private String getFolderPathName(List<Folder> searchableSpace, Folder currentFolder) {
+        List<Folder> result = new ArrayList<>();
+        List<String> resultString = new ArrayList<>();
+        result.add(currentFolder);
+        resultString.add(currentFolder.getFolderName());
+        int listLength = searchableSpace.size();
+        for (int i = 0; i < listLength; i++) {
+            for (Folder f: searchableSpace) {
+                Long comparable = result.get(result.size()-1).getParentId();
+                if (f.getFolderId() != null  &&  f.getFolderId().equals(comparable)) {
+                    result.add(f);
+                    resultString.add(f.getFolderName());
+                }
+            }
+        }
+        Collections.reverse(resultString);
+        StringBuilder sb = new StringBuilder();
+        sb.append("My-Items/");
+        for (String s : resultString) {
+            sb.append(s);
+            sb.append("/");
+        }
+        return sb.toString();
+    }
+
     private ItemResponse createItemResponse(Item item) {
         byte[] imageBytes = new byte[]{};
         String categoryName = null;
@@ -119,7 +146,6 @@ public class InventoryService {
         FolderDto folderDto = new FolderDto();
         folderDto.setFolderId(folder.getFolderId());
         folderDto.setFolderName(folder.getFolderName());
-        folderDto.setFolderPathName(folder.getFolderPathName());
         folderDto.setUserId(folder.getUserId());
         folderDto.setParentId(folder.getParentId());
         return folderDto;

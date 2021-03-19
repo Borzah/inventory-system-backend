@@ -32,4 +32,8 @@ public class ItemService {
     public List<Item> getAllItems() {
         return itemRepository.findAll();
     }
+
+    public void deleteItem(Long itemId) {
+        itemRepository.deleteById(itemId);
+    }
 }

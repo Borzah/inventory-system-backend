@@ -21,13 +21,8 @@ public class FolderService {
         folder.setFolderName(folderName);
         folder.setUserId(folderDto.getUserId());
         Long parentId = folderDto.getParentId();
-        String parentFolderPathName = folderName;
-        folder.setFolderPathName(folderName);
         if (parentId != null) {
             folder.setParentId(folderDto.getParentId());
-            parentFolderPathName = folderRepository.findByFolderId(parentId).getFolderPathName();
-            String currentFolderPathName = parentFolderPathName + "/" + folderName;
-            folder.setFolderPathName(currentFolderPathName);
         }
         return convertFolder(folderRepository.save(folder));
     }
@@ -38,11 +33,14 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteFolder(Long folderId) {
+        folderRepository.deleteById(folderId);
+    }
+
     private FolderDto convertFolder(Folder folder) {
         FolderDto folderDto = new FolderDto();
         folderDto.setFolderId(folder.getFolderId());
         folderDto.setFolderName(folder.getFolderName());
-        folderDto.setFolderPathName(folder.getFolderPathName());
         folderDto.setUserId(folder.getUserId());
         folderDto.setParentId(folder.getParentId());
         return folderDto;

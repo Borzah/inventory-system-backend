@@ -19,8 +19,6 @@ public class Folder {
     private Long folderId;
     @Column(name = "folder_name")
     private String folderName;
-    @Column(name = "folder_path_name")
-    private String folderPathName;
     @Column(name = "parent_id")
     private Long parentId;
     @Column(name = "user_id")
