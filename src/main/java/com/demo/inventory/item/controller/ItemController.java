@@ -21,9 +21,19 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
+    @GetMapping("{itemId}")
+    public ItemDto getItem(@PathVariable Long itemId) {
+        return itemService.getItem(itemId);
+    }
+
     @PostMapping
-    public Item addItem(@RequestBody ItemDto itemDto) {
+    public ItemDto addItem(@RequestBody ItemDto itemDto) {
         return itemService.addItem(itemDto);
+    }
+
+    @PutMapping("{itemId}")
+    public ItemDto updateItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto) {
+        return itemService.updateItem(itemId, itemDto);
     }
 
     @DeleteMapping("{itemId}")
