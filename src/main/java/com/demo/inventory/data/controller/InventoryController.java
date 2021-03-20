@@ -29,7 +29,8 @@ public class InventoryController {
 
     @GetMapping("user/{userId}")
     public List<ItemResponse> getAllUsersItemResponses(@PathVariable Long userId,
+                                                       @RequestParam(required = false) String attribute,
                                                        @RequestParam(required = false) String search) {
-        return inventoryService.getAllUsersItemResponses(userId, search);
+        return inventoryService.getAllUsersItemResponses(userId, attribute, search);
     }
 }

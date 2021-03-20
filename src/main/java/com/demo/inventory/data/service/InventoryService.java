@@ -61,24 +61,121 @@ public class InventoryService {
     }
 
     // search by date not supported
-    public List<ItemResponse> getAllUsersItemResponses(Long userId, String search) {
-        List<ItemResponse> items = itemRepository.findAllByUserId(userId).stream()
-                .map(this::createItemResponse)
-                .collect(Collectors.toList());
+    public List<ItemResponse> getAllUsersItemResponses(Long userId, String attribute,String search) {
+        List<ItemResponse> items = new ArrayList<>();
+        List<ItemResponse> result = new ArrayList<>();
+        if (attribute != null) {
+            switch (attribute) {
+                case "category":
+                    items = itemRepository.findAllByUserIdAndCategoryIdNotNull(userId).stream()
+                            .map(this::createItemResponse)
+                            .collect(Collectors.toList());
+                    if (search != null) {
+                        String replacedInput = search.replace("_", " ");
+                        items.forEach(item -> {
+                            if (isMatchedWithCriteriaCategory(replacedInput, item)) {
+                                result.add(item);
+                            }
+                        });
+                        return result;
+                    }
+                    break;
+                case "serialNumber":
+                    items = itemRepository.findAllByUserIdAndSerialNumberNotNull(userId).stream()
+                            .map(this::createItemResponse)
+                            .collect(Collectors.toList());
+                    if (search != null) {
+                        String replacedInput = search.replace("_", " ");
+                        items.forEach(item -> {
+                            if (isMatchedWithCriteriaSerialNumber(replacedInput, item)) {
+                                result.add(item);
+                            }
+                        });
+                        return result;
+                    }
+                    break;
+                case "description":
+                    items = itemRepository.findAllByUserIdAndDescriptionNotNull(userId).stream()
+                            .map(this::createItemResponse)
+                            .collect(Collectors.toList());
+                    if (search != null) {
+                        String replacedInput = search.replace("_", " ");
+                        items.forEach(item -> {
+                            if (isMatchedWithCriteriaDescription(replacedInput, item)) {
+                                result.add(item);
+                            }
+                        });
+                        return result;
+                    }
+                    break;
+                case "price":
+                    items = itemRepository.findAllByUserIdAndItemPriceNotNull(userId).stream()
+                            .map(this::createItemResponse)
+                            .collect(Collectors.toList());
+                    if (search != null) {
+                        String replacedInput = search.replace("_", " ");
+                        items.forEach(item -> {
+                            if (isMatchedWithCriteriaPrice(replacedInput, item)) {
+                                result.add(item);
+                            }
+                        });
+                        return result;
+                    }
+                    break;
+                default:
+                    items = itemRepository.findAllByUserId(userId).stream()
+                            .map(this::createItemResponse)
+                            .collect(Collectors.toList());
+                    if (attribute.equals("name")) {
+                        if (search != null) {
+                            String replacedInput = search.replace("_", " ");
+                            items.forEach(item -> {
+                                if (isMatchedWithCriteriaName(replacedInput, item)) {
+                                    result.add(item);
+                                }
+                            });
+                            return result;
+                        }
+                    }
+            }
+        } else {
+            items = itemRepository.findAllByUserId(userId).stream()
+                    .map(this::createItemResponse)
+                    .collect(Collectors.toList());
+        }
         if (search == null) {
             return items;
         }
         String replacedInput = search.replace("_", " ");
-        List<ItemResponse> result = new ArrayList<>();
         items.forEach(item -> {
-            if (isMatchedWithCriteria(replacedInput, item)) {
+            if (isMatchedWithCriteriaAll(replacedInput, item)) {
                 result.add(item);
             }
         });
         return result;
     }
 
-    private boolean isMatchedWithCriteria(String search, ItemResponse item) {
+    private boolean isMatchedWithCriteriaName(String search, ItemResponse item) {
+        return item.getItemName().toLowerCase().contains(search.toLowerCase());
+    }
+
+    private boolean isMatchedWithCriteriaCategory(String search, ItemResponse item) {
+        return item.getCategoryName().toLowerCase().contains(search.toLowerCase());
+    }
+
+    private boolean isMatchedWithCriteriaSerialNumber(String search, ItemResponse item) {
+        return item.getSerialNumber().toLowerCase().contains(search.toLowerCase());
+    }
+
+    private boolean isMatchedWithCriteriaDescription(String search, ItemResponse item) {
+        return item.getDescription().toLowerCase().contains(search.toLowerCase());
+    }
+
+    private boolean isMatchedWithCriteriaPrice(String search, ItemResponse item) {
+        return Float.toString(item.getItemPrice()).equals(search);
+    }
+
+    private boolean isMatchedWithCriteriaAll(String search, ItemResponse item) {
         return item.getItemName().equalsIgnoreCase(search.toLowerCase()) || item.getFolderName() != null
                 && item.getFolderName().equalsIgnoreCase(search.toLowerCase()) ||
                 item.getCategoryName() != null && item.getCategoryName().equalsIgnoreCase(search.toLowerCase())
