@@ -39,9 +39,9 @@ public class UserController {
     }
 
     @Secured(Roles.USER)
-    @PostMapping("logout/{username}")
-    public ResponseEntity<Void> logout(@PathVariable String username, @RequestHeader("Authorization") String authToken) {
-        authService.logout(username, authToken);
+    @PostMapping("logout/{userId}")
+    public ResponseEntity<Void> logout(@PathVariable Long userId, @RequestHeader("Authorization") String authToken) {
+        authService.logout(userId, authToken);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

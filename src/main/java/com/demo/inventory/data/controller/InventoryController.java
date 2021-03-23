@@ -3,11 +3,14 @@ package com.demo.inventory.data.controller;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.InventoryService;
+import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Secured(Roles.USER)
 @RestController
 @RequestMapping("inventory")
 @CrossOrigin(origins = "http://localhost:3000")

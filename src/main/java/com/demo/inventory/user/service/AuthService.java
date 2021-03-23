@@ -43,7 +43,7 @@ public class AuthService {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
         MyUser myUser = (MyUser) authenticate.getPrincipal();
         String token = jwtTokenProvider.generateToken(myUser, myUser.getId());
-        userTokenHolder.addToken(myUser.getUsername(), token);
+        userTokenHolder.addToken(myUser.getId(), token);
         return LoginResponse.builder()
                 .userId(myUser.getId())
                 .username(myUser.getUsername())
@@ -52,9 +52,9 @@ public class AuthService {
                 .build();
     }
 
-    public void logout(String username, String authToken) {
-        authChecker.checkUserAttachingTheirInfo(userService.getUserIdByUsername(username), authToken);
-        userTokenHolder.removeToken(username);
+    public void logout(Long userId, String authToken) {
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
+        userTokenHolder.removeToken(userId);
     }
 }
 

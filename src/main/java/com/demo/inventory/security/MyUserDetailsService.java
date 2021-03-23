@@ -42,9 +42,9 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     private Stream<DbRole> getRoles(User user) {
-        if (user.getRole().isAdmin()) {
-            return Arrays.stream(DbRole.values());
-        }
+//        if (user.getRole().isAdmin()) {
+//            return Arrays.stream(DbRole.values());
+//        }
         return Stream.of(user.getRole());
     }
 }

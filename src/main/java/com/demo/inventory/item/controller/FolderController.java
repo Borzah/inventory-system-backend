@@ -6,11 +6,14 @@ import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.service.FolderService;
+import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Secured(Roles.USER)
 @RestController
 @RequestMapping("folders")
 @CrossOrigin(origins = "http://localhost:3000")

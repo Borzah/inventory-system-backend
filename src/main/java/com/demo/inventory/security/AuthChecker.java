@@ -15,7 +15,7 @@ public class AuthChecker {
     public void checkUserAttachingTheirInfo(Long userId, String authToken) {
         Long requestingUserId = jwtTokenProvider.getUserIdFromToken(authToken);
         if (!userId.equals(requestingUserId)) {
-            throw new AuthorizationException("User can attach only their shopping list!");
+            throw new AuthorizationException("User can attach only their folders and items!");
         }
     }
 }
