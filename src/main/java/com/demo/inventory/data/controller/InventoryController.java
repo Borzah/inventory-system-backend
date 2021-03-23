@@ -21,19 +21,22 @@ public class InventoryController {
 
     @GetMapping
     public FolderResponse getContentBySection(@RequestParam Long user,
-                                              @RequestParam(required = false) Long folder) {
-        return inventoryService.getContentBySection(user, folder);
+                                              @RequestParam(required = false) Long folder,
+                                              @RequestHeader("Authorization") String authToken) {
+        return inventoryService.getContentBySection(user, folder, authToken);
     }
 
     @GetMapping("{itemId}")
-    public ItemResponse getItemResponseByItemId(@PathVariable Long itemId) {
-        return inventoryService.getItemResponseByItemId(itemId);
+    public ItemResponse getItemResponseByItemId(@PathVariable Long itemId,
+                                                @RequestHeader("Authorization") String authToken) {
+        return inventoryService.getItemResponseByItemId(itemId, authToken);
     }
 
     @GetMapping("user/{userId}")
     public List<ItemResponse> getAllUsersItemResponses(@PathVariable Long userId,
                                                        @RequestParam(required = false) String attribute,
-                                                       @RequestParam(required = false) String search) {
-        return inventoryService.getAllUsersItemResponses(userId, attribute, search);
+                                                       @RequestParam(required = false) String search,
+                                                       @RequestHeader("Authorization") String authToken) {
+        return inventoryService.getAllUsersItemResponses(userId, attribute, search, authToken);
     }
 }

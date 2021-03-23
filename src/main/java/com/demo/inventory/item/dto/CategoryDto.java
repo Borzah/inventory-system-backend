@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CategoryDto {
 
     private Long categoryId;
+    private Long userId;
     private String categoryName;
 
     public CategoryDto(String categoryName) {

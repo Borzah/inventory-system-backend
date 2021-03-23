@@ -3,6 +3,7 @@ package com.demo.inventory.item.service;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
+import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,16 @@ import java.util.stream.Collectors;
 public class FolderService {
 
     private final FolderRepository folderRepository;
+    private final AuthChecker authChecker;
 
-    public FolderDto addFolder(FolderDto folderDto) {
+    public FolderDto addFolder(FolderDto folderDto, String authToken) {
+        Long userId = folderDto.getUserId();
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
         Folder folder = new Folder();
         String folderName = folderDto.getFolderName();
         folder.setFolderName(folderName);
-        folder.setUserId(folderDto.getUserId());
-        Long parentId = folderDto.getParentId();
-        if (parentId != null) {
-            folder.setParentId(folderDto.getParentId());
-        }
+        folder.setUserId(userId);
+        folder.setParentId(folderDto.getParentId());
         return convertFolder(folderRepository.save(folder));
     }
 
@@ -33,7 +34,9 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFolder(Long folderId) {
+    public void deleteFolder(Long folderId, String authToken) {
+        Long userId = folderRepository.findByFolderId(folderId).getUserId();
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
         folderRepository.deleteById(folderId);
     }
 

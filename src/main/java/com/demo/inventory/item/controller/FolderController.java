@@ -24,8 +24,9 @@ public class FolderController {
     private final FolderRepository folderRepository;
 
     @PostMapping
-    public FolderDto addFolder(@RequestBody FolderDto folderDto) {
-        return folderService.addFolder(folderDto);
+    public FolderDto addFolder(@RequestBody FolderDto folderDto,
+                               @RequestHeader("Authorization") String authToken) {
+        return folderService.addFolder(folderDto, authToken);
     }
 
     @GetMapping
@@ -34,10 +35,12 @@ public class FolderController {
     }
 
     @DeleteMapping("{folderId}")
-    public void deleteFolder(@PathVariable Long folderId) {
-        folderService.deleteFolder(folderId);
+    public void deleteFolder(@PathVariable Long folderId,
+                             @RequestHeader("Authorization") String authToken) {
+        folderService.deleteFolder(folderId, authToken);
     }
 
+    @Deprecated
     @GetMapping("greater/user/{userId}/folder/{folderId}")
     public List<Folder> test(@PathVariable Long userId, @PathVariable Long folderId) {
         return folderRepository.findAllByUserIdAndFolderIdIsLessThan(userId, folderId);

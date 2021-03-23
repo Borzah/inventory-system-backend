@@ -25,22 +25,27 @@ public class ItemController {
     }
 
     @GetMapping("{itemId}")
-    public ItemDto getItem(@PathVariable Long itemId) {
-        return itemService.getItem(itemId);
+    public ItemDto getItem(@PathVariable Long itemId,
+                           @RequestHeader("Authorization") String authToken) {
+        return itemService.getItem(itemId, authToken);
     }
 
     @PostMapping
-    public ItemDto addItem(@RequestBody ItemDto itemDto) {
-        return itemService.addItem(itemDto);
+    public ItemDto addItem(@RequestBody ItemDto itemDto,
+                           @RequestHeader("Authorization") String authToken) {
+        return itemService.addItem(itemDto, authToken);
     }
 
     @PutMapping("{itemId}")
-    public ItemDto updateItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto) {
-        return itemService.updateItem(itemId, itemDto);
+    public ItemDto updateItem(@PathVariable Long itemId,
+                              @RequestBody ItemDto itemDto,
+                              @RequestHeader("Authorization") String authToken) {
+        return itemService.updateItem(itemId, itemDto, authToken);
     }
 
     @DeleteMapping("{itemId}")
-    public void deleteItem(@PathVariable Long itemId) {
-        itemService.deleteItem(itemId);
+    public void deleteItem(@PathVariable Long itemId,
+                           @RequestHeader("Authorization") String authToken) {
+        itemService.deleteItem(itemId, authToken);
     }
 }

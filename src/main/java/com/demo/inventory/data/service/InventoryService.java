@@ -11,6 +11,7 @@ import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ImageRepository;
 import com.demo.inventory.item.repository.ItemRepository;
+import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,16 @@ public class InventoryService {
     private final FolderRepository folderRepository;
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
+    private final AuthChecker authChecker;
 
-    public ItemResponse getItemResponseByItemId(Long itemId) {
-        return createItemResponse(itemRepository.findByItemId(itemId));
+    public ItemResponse getItemResponseByItemId(Long itemId, String authToken) {
+        Item item = itemRepository.findByItemId(itemId);
+        authChecker.checkUserAttachingTheirInfo(item.getUserId(), authToken);
+        return createItemResponse(item);
     }
 
-    public FolderResponse getContentBySection(Long user, Long folder) {
+    public FolderResponse getContentBySection(Long user, Long folder, String authToken) {
+        authChecker.checkUserAttachingTheirInfo(user, authToken);
         List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(user, folder).stream()
                 .map(this::convertFolder)
                 .collect(Collectors.toList());
@@ -61,7 +66,8 @@ public class InventoryService {
     }
 
     // search by date not supported
-    public List<ItemResponse> getAllUsersItemResponses(Long userId, String attribute,String search) {
+    public List<ItemResponse> getAllUsersItemResponses(Long userId, String attribute, String search, String authToken) {
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
         List<ItemResponse> items = new ArrayList<>();
         List<ItemResponse> result = new ArrayList<>();
         if (attribute != null) {

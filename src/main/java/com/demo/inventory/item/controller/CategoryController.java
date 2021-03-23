@@ -24,8 +24,15 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("user/{userId}")
+    public List<CategoryDto> getAllCategoriesByUserId(@PathVariable Long userId,
+                                                      @RequestHeader("Authorization") String authToken) {
+        return categoryService.getAllCategoriesByUserId(userId, authToken);
+    }
+
     @PostMapping
-    public CategoryDto addCategory(@RequestBody CategoryDto categoryDto) {
-        return categoryService.addCategory(categoryDto);
+    public CategoryDto addCategory(@RequestBody CategoryDto categoryDto,
+                                   @RequestHeader("Authorization") String authToken) {
+        return categoryService.addCategory(categoryDto, authToken);
     }
 }

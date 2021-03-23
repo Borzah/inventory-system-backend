@@ -21,9 +21,11 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping("{imageId}")
-    public Image addImage(@PathVariable Long imageId, @RequestParam("imageFile") MultipartFile file)
+    public Image addImage(@PathVariable Long imageId,
+                          @RequestParam("imageFile") MultipartFile file,
+                          @RequestHeader("Authorization") String authToken)
             throws IOException {
-        return imageService.addImage(imageId, file);
+        return imageService.addImage(imageId, file, authToken);
     }
 
     @GetMapping
