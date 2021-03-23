@@ -28,16 +28,21 @@ public class JwtTokenProvider {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return doGenerateToken(new HashMap<>(), userDetails.getUsername());
+    public Long getUserIdFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.get("userId", Long.class);
+    }
+
+    public String generateToken(UserDetails userDetails, Long userId) {
+        return doGenerateToken(new HashMap<>(), userDetails.getUsername(), userId);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
         return getUsernameFromToken(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    public String createTokenForTests(String username) {
-        return doGenerateToken(new HashMap<>(), username);
+    public String createTokenForTests(String username, Long userId) {
+        return doGenerateToken(new HashMap<>(), username, userId);
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -53,9 +58,10 @@ public class JwtTokenProvider {
         return getExpirationDateFromToken(token).before(new Date());
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, Long userId) {
         long currentTimeMs = System.currentTimeMillis();
         return Jwts.builder().setClaims(claims).setSubject(subject)
+                .claim("userId", userId)
                 .setIssuedAt(new Date(currentTimeMs))
                 .setExpiration(new Date(currentTimeMs + jwtConfig.getDurationMillis()))
                 .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())

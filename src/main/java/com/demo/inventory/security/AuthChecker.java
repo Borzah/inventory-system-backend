@@ -1,24 +1,21 @@
 package com.demo.inventory.security;
 
-import com.demo.inventory.user.service.UserService;
+import com.demo.inventory.exception.AuthorizationException;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AuthChecker {
 
-    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthChecker(UserService userService, JwtTokenProvider jwtTokenProvider) {
-        this.userService = userService;
+    public AuthChecker(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     public void checkUserAttachingTheirInfo(Long userId, String authToken) {
-        String parentUsername = userService.getUsernameById(userId);
-        String requestingUsername = jwtTokenProvider.getUsernameFromToken(authToken.substring(7));
-//        if (!parentUsername.equals(requestingUsername)) {
-//            throw new AuthorizationException("User can attach only their shopping list!");
-//        }
+        Long requestingUserId = jwtTokenProvider.getUserIdFromToken(authToken);
+        if (!userId.equals(requestingUserId)) {
+            throw new AuthorizationException("User can attach only their shopping list!");
+        }
     }
 }
