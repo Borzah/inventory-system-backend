@@ -13,7 +13,8 @@ public class CategoryDto {
     private Long userId;
     private String categoryName;
 
-    public CategoryDto(String categoryName) {
+    public CategoryDto(Long userId, String categoryName) {
+        this.userId = userId;
         this.categoryName = categoryName;
     }
 }

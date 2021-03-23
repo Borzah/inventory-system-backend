@@ -33,8 +33,8 @@ public class JwtTokenProvider {
         return claims.get("userId", Long.class);
     }
 
-    public String generateToken(UserDetails userDetails, Long userId) {
-        return doGenerateToken(new HashMap<>(), userDetails.getUsername(), userId);
+    public String generateToken(MyUser userDetails) {
+        return doGenerateToken(new HashMap<>(), userDetails.getUsername(), userDetails.getId());
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -60,8 +60,8 @@ public class JwtTokenProvider {
 
     private String doGenerateToken(Map<String, Object> claims, String subject, Long userId) {
         long currentTimeMs = System.currentTimeMillis();
+        claims.put("userId", userId);
         return Jwts.builder().setClaims(claims).setSubject(subject)
-                .claim("userId", userId)
                 .setIssuedAt(new Date(currentTimeMs))
                 .setExpiration(new Date(currentTimeMs + jwtConfig.getDurationMillis()))
                 .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())

@@ -1,0 +1,15 @@
+// Register user and login for user john
+{
+    "username": "john@mail.com",
+    "password": "password"
+}
+// Register and login for user anna
+{
+    "username": "anna@mail.com",
+    "password": "password"
+}
+// Login for admin
+{
+    "username": "admin@mail.com",
+    "password": "password"
+}
