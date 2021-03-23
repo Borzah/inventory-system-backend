@@ -1,10 +1,12 @@
 package com.demo.inventory.user.model;
 
+import com.demo.inventory.security.DbRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,11 +24,14 @@ public class User {
     @Column(name = "password")
     private String password;
     @Column(name = "role")
-    private String role;
+    private DbRole role;
+    @Column(name = "date_registered")
+    private Date dateRegistered;
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, DbRole role, Date dateRegistered) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.dateRegistered = dateRegistered;
     }
 }
