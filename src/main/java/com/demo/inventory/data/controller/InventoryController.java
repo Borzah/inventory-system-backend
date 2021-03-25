@@ -3,6 +3,7 @@ package com.demo.inventory.data.controller;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.InventoryService;
+import com.demo.inventory.data.service.SearchService;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -18,6 +19,7 @@ import java.util.List;
 public class InventoryController {
 
     private final InventoryService inventoryService;
+    private final SearchService searchService;
 
     @GetMapping
     public FolderResponse getContentBySection(@RequestParam Long user,
@@ -37,6 +39,6 @@ public class InventoryController {
                                                        @RequestParam(required = false) String attribute,
                                                        @RequestParam(required = false) String search,
                                                        @RequestHeader("Authorization") String authToken) {
-        return inventoryService.getAllUsersItemResponses(userId, attribute, search, authToken);
+        return searchService.getAllUsersItemResponses(userId, attribute, search, authToken);
     }
 }

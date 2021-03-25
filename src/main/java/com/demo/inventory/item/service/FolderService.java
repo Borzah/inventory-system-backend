@@ -40,7 +40,7 @@ public class FolderService {
         folderRepository.deleteById(folderId);
     }
 
-    private FolderDto convertFolder(Folder folder) {
+    public FolderDto convertFolder(Folder folder) {
         FolderDto folderDto = new FolderDto();
         folderDto.setFolderId(folder.getFolderId());
         folderDto.setFolderName(folder.getFolderName());
