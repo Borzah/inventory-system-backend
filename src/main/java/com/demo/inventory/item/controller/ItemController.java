@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Secured(Roles.USER)
@@ -31,14 +32,14 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto addItem(@RequestBody ItemDto itemDto,
+    public ItemDto addItem(@Valid @RequestBody ItemDto itemDto,
                            @RequestHeader("Authorization") String authToken) {
         return itemService.addItem(itemDto, authToken);
     }
 
     @PutMapping("{itemId}")
     public ItemDto updateItem(@PathVariable Long itemId,
-                              @RequestBody ItemDto itemDto,
+                              @Valid @RequestBody ItemDto itemDto,
                               @RequestHeader("Authorization") String authToken) {
         return itemService.updateItem(itemId, itemDto, authToken);
     }

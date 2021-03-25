@@ -1,6 +1,7 @@
 package com.demo.inventory.security;
 
 import com.demo.inventory.exception.AuthorizationException;
+import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class AuthChecker {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
 
     public void checkUserAttachingTheirInfo(Long userId, String authToken) {
         Long tokenUserId = jwtTokenProvider.getUserIdFromToken(authToken.substring(7));

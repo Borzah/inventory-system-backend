@@ -1,5 +1,7 @@
 package com.demo.inventory.item.service;
 
+import com.demo.inventory.exception.FolderException;
+import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
@@ -16,16 +18,20 @@ public class FolderService {
 
     private final FolderRepository folderRepository;
     private final AuthChecker authChecker;
+    private final ItemUtils itemUtils;
 
     public FolderDto addFolder(FolderDto folderDto, String authToken) {
         Long userId = folderDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        Folder folder = new Folder();
-        String folderName = folderDto.getFolderName();
-        folder.setFolderName(folderName);
-        folder.setUserId(userId);
-        folder.setParentId(folderDto.getParentId());
-        return convertFolder(folderRepository.save(folder));
+        itemUtils.checkNamingRegex(List.of(folderDto.getFolderName()));
+        if (folderDto.getParentId() != null) {
+            itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(folderDto.getParentId(), userId);
+        }
+        List<Folder> folders = folderRepository.findAllByFolderNameAndUserIdAndParentId(folderDto.getFolderName(), userId, folderDto.getParentId());
+        if (folders.size() > 0) {
+            throw new FolderException("Folder with such name already exists in this section");
+        }
+        return convertFolder(folderRepository.save(createFolderFromFodlerDto(folderDto)));
     }
 
     public List<FolderDto> getAllFolders() {
@@ -47,5 +53,13 @@ public class FolderService {
         folderDto.setUserId(folder.getUserId());
         folderDto.setParentId(folder.getParentId());
         return folderDto;
+    }
+
+    private Folder createFolderFromFodlerDto(FolderDto folderDto) {
+        Folder folder = new Folder();
+        folder.setFolderName(folderDto.getFolderName());
+        folder.setUserId(folderDto.getUserId());
+        folder.setParentId(folderDto.getParentId());
+        return folder;
     }
 }

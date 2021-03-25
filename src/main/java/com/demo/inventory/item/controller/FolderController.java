@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Secured(Roles.USER)
@@ -24,7 +25,7 @@ public class FolderController {
     private final FolderRepository folderRepository;
 
     @PostMapping
-    public FolderDto addFolder(@RequestBody FolderDto folderDto,
+    public FolderDto addFolder(@Valid @RequestBody FolderDto folderDto,
                                @RequestHeader("Authorization") String authToken) {
         return folderService.addFolder(folderDto, authToken);
     }

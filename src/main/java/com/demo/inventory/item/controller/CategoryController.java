@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryDto addCategory(@RequestBody CategoryDto categoryDto,
+    public CategoryDto addCategory(@Valid @RequestBody CategoryDto categoryDto,
                                    @RequestHeader("Authorization") String authToken) {
         return categoryService.addCategory(categoryDto, authToken);
     }

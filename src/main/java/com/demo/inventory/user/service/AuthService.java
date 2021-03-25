@@ -34,12 +34,6 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginDto loginDto) {
-//        if (isBlank(loginDto.getUsername())) {
-//            throw new UserException("missing username");
-//        }
-//        if (isBlank(loginDto.getPassword())) {
-//            throw new UserException("missing password");
-//        }
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
         MyUser myUser = (MyUser) authenticate.getPrincipal();
         String token = jwtTokenProvider.generateToken(myUser);

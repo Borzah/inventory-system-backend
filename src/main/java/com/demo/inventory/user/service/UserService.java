@@ -1,5 +1,6 @@
 package com.demo.inventory.user.service;
 
+import com.demo.inventory.exception.UserException;
 import com.demo.inventory.security.DbRole;
 import com.demo.inventory.user.dto.RegisterDto;
 import com.demo.inventory.user.model.User;
@@ -23,12 +24,9 @@ public class UserService {
     }
 
     public void registerUser(RegisterDto registerDto) {
-//        if (userRepository.findAllByUsername(registerDto.getUsername()).size() > 0) {
-//            throw new UserException("User with this username already exists!");
-//        }
-//        if (userRepository.findAllByEmail(registerDto.getEmail()).size() > 0) {
-//            throw new UserException("User with this email already exists!");
-//        }
+        if (userRepository.findAllByUsername(registerDto.getUsername()).size() > 0) {
+            throw new UserException("User with this username already exists!");
+        }
         User user = new User();
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
