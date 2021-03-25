@@ -25,38 +25,10 @@ public class SearchService {
         List<ItemResponse> items = getItemsByAttributeAndUserId(userId, "name");
         List<ItemResponse> result = new ArrayList<>();
         if (attribute != null) {
-            switch (attribute) {
-                case "category":
-                    items = getItemsByAttributeAndUserId(userId, "category");
-                    if (search != null) {
-                        return searchAndReturnItems(search, items, result, "category");
-                    }
-                    break;
-                case "serialNumber":
-                    items = getItemsByAttributeAndUserId(userId, "serialNumber");
-                    if (search != null) {
-                        return searchAndReturnItems(search, items, result, "serialNumber");
-                    }
-                    break;
-                case "description":
-                    items = getItemsByAttributeAndUserId(userId, "description");
-                    if (search != null) {
-                        return searchAndReturnItems(search, items, result, "description");
-                    }
-                    break;
-                case "price":
-                    items = getItemsByAttributeAndUserId(userId, "price");
-                    if (search != null) {
-                        return searchAndReturnItems(search, items, result, "price");
-                    }
-                    break;
-                default:
-                    if (attribute.equals("name")) {
-                        if (search != null) {
-                            return searchAndReturnItems(search, items, result, "name");
-                        }
-                    }
-                }
+            items = getItemsByAttributeAndUserId(userId, attribute);
+            if (search != null) {
+                return searchAndReturnItems(search, items, result, attribute);
+            }
         }
         if (search == null) {
             return items;
@@ -111,12 +83,13 @@ public class SearchService {
             case "name":
                 return item.getItemName().toLowerCase().contains(search.toLowerCase());
             default:
-                return item.getItemName().equalsIgnoreCase(search.toLowerCase()) || item.getFolderName() != null
-                        && item.getFolderName().equalsIgnoreCase(search.toLowerCase()) ||
-                        item.getCategoryName() != null && item.getCategoryName().equalsIgnoreCase(search.toLowerCase())
+                return item.getItemName().toLowerCase().contains(search.toLowerCase()) || item.getFolderName() != null
+                        && item.getFolderName().toLowerCase().contains(search.toLowerCase()) ||
+                        item.getCategoryName() != null && item.getCategoryName().toLowerCase().contains(search.toLowerCase())
                         || item.getDescription() != null &&
                         item.getDescription().toLowerCase().contains(search.toLowerCase()) ||
-                        item.getSerialNumber() != null && item.getSerialNumber().equalsIgnoreCase(search.toLowerCase());
+                        item.getSerialNumber() != null && item.getSerialNumber().toLowerCase().contains(search.toLowerCase())
+                        || item.getItemPrice() != null && Float.toString(item.getItemPrice()).contains(search);
         }
     }
 }
