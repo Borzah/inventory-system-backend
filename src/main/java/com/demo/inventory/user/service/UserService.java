@@ -5,6 +5,7 @@ import com.demo.inventory.security.DbRole;
 import com.demo.inventory.user.dto.RegisterDto;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +14,11 @@ import java.util.Date;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public void registerUser(RegisterDto registerDto) {
         if (userRepository.findAllByUsername(registerDto.getUsername()).size() > 0) {

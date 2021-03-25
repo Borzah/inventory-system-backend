@@ -6,6 +6,7 @@ import com.demo.inventory.security.MyUser;
 import com.demo.inventory.security.UserTokenHolder;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,25 +14,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static org.apache.logging.log4j.util.Strings.isBlank;
-
 @Service
 @Transactional
+@AllArgsConstructor
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserTokenHolder userTokenHolder;
     private final AuthChecker authChecker;
-    private final UserService userService;
-
-    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserTokenHolder userTokenHolder, AuthChecker authChecker, UserService userService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userTokenHolder = userTokenHolder;
-        this.authChecker = authChecker;
-        this.userService = userService;
-    }
 
     public LoginResponse login(LoginDto loginDto) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));

@@ -7,6 +7,7 @@ import com.demo.inventory.user.dto.RegisterDto;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.service.AuthService;
 import com.demo.inventory.user.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,15 +18,11 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("user")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
-
-    public UserController(UserService userService, AuthService authService) {
-        this.userService = userService;
-        this.authService = authService;
-    }
 
     @PostMapping("register")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto registerDto){

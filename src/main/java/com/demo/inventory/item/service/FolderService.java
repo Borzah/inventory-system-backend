@@ -31,7 +31,7 @@ public class FolderService {
         if (folders.size() > 0) {
             throw new FolderException("Folder with such name already exists in this section");
         }
-        return convertFolder(folderRepository.save(createFolderFromFodlerDto(folderDto)));
+        return convertFolder(folderRepository.save(createFolderFromFolderDto(folderDto)));
     }
 
     public List<FolderDto> getAllFolders() {
@@ -55,7 +55,7 @@ public class FolderService {
         return folderDto;
     }
 
-    private Folder createFolderFromFodlerDto(FolderDto folderDto) {
+    private Folder createFolderFromFolderDto(FolderDto folderDto) {
         Folder folder = new Folder();
         folder.setFolderName(folderDto.getFolderName());
         folder.setUserId(folderDto.getUserId());
