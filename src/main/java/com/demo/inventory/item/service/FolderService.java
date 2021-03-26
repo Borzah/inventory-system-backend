@@ -27,8 +27,7 @@ public class FolderService {
         if (folderDto.getParentId() != null) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(folderDto.getParentId(), userId);
         }
-        List<Folder> folders = folderRepository.findAllByFolderNameAndUserIdAndParentId(folderDto.getFolderName(), userId, folderDto.getParentId());
-        if (folders.size() > 0) {
+        if (!folderRepository.findAllByFolderNameAndUserIdAndParentId(folderDto.getFolderName(), userId, folderDto.getParentId()).isEmpty()) {
             throw new FolderException("Folder with such name already exists in this section");
         }
         return convertFolder(folderRepository.save(createFolderFromFolderDto(folderDto)));

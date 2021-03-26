@@ -1,6 +1,7 @@
 package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.ItemException;
+import com.demo.inventory.item.dto.ImageDto;
 import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.repository.ImageRepository;
 import com.demo.inventory.item.repository.ItemRepository;
@@ -20,14 +21,12 @@ public class ImageService {
     private final ItemRepository itemRepository;
     private final AuthChecker authChecker;
 
-    public Image addImage(Long imageId, MultipartFile file, String authToken) throws IOException {
+    public ImageDto addImage(Long imageId, MultipartFile file, String authToken) throws IOException {
         Long userId = itemRepository.findByItemId(imageId).getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         validateImage(file);
-        Image image = new Image();
-        image.setImageId(imageId);
-        image.setImageBytes(file.getBytes());
-        return imageRepository.save(image);
+        Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();
+        return convertImage(imageRepository.save(image));
     }
 
     public List<Image> getAllImages() {
@@ -42,5 +41,9 @@ public class ImageService {
         if (file.getSize() > 400000L) {
             throw new ItemException("A file cannot be over 1 Mb");
         }
+    }
+
+    private ImageDto convertImage(Image image) {
+        return ImageDto.builder().imageId(image.getImageId()).imageBytes(image.getImageBytes()).build();
     }
 }

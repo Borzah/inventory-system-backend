@@ -28,8 +28,8 @@ public class ItemService {
         if (itemDto.getFolderId() != null) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
+        checkNameForDuplicates(itemDto, userId);
         Item item = createItemFromDto(itemDto);
-        checkNameForDuplicates(itemDto, item);
         return convertItem(itemRepository.save(item));
     }
 
@@ -51,9 +51,9 @@ public class ItemService {
         if (itemDto.getFolderId() != null) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
+        checkNameForDuplicates(itemDto, userId);
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
-        checkNameForDuplicates(itemDto, item);
         return convertItem(itemRepository.save(item));
     }
 
@@ -71,12 +71,11 @@ public class ItemService {
         itemUtils.checkNamingRegex(namings);
     }
 
-    private void checkNameForDuplicates(ItemDto itemDto, Item item) {
-        List<Item> result = itemRepository.findAllByItemNameAndFolderIdAndUserId(
+    private void checkNameForDuplicates(ItemDto itemDto, Long userId) {
+        if (!itemRepository.findAllByItemNameAndFolderIdAndUserId(
                 itemDto.getItemName(),
                 itemDto.getFolderId(),
-                item.getUserId());
-        if (result.size() > 0) {
+                userId).isEmpty()) {
             throw new ItemException("Item with such name is already in that folder");
         }
     }

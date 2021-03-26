@@ -45,10 +45,9 @@ public class CategoryService {
     }
 
     private CategoryDto convertCategory(Category category) {
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setCategoryId(category.getCategoryId());
-        categoryDto.setUserId(category.getUserId());
-        categoryDto.setCategoryName(category.getCategoryName());
-        return categoryDto;
+        return CategoryDto.builder()
+                .categoryId(category.getCategoryId())
+                .userId(category.getUserId())
+                .categoryName(category.getCategoryName()).build();
     }
 }

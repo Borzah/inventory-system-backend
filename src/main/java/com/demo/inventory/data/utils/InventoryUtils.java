@@ -10,7 +10,6 @@ import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ImageRepository;
-import com.demo.inventory.item.repository.ItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -87,13 +86,12 @@ public class InventoryUtils {
                                                String currentFolderPathName,
                                                List<FolderDto> folders,
                                                List<ItemResponse> items) {
-        FolderResponse content = new FolderResponse();
-        content.setCurrentFolderId(currentFolderId);
-        content.setParentFolderId(parentFolderId);
-        content.setCurrentFolderName(currentFolderName);
-        content.setCurrentFolderPathName(currentFolderPathName);
-        content.setFolders(folders);
-        content.setItems(items);
-        return content;
+        return FolderResponse.builder()
+                .currentFolderId(currentFolderId)
+                .parentFolderId(parentFolderId)
+                .currentFolderName(currentFolderName)
+                .currentFolderPathName(currentFolderPathName)
+                .folders(folders)
+                .items(items).build();
     }
 }

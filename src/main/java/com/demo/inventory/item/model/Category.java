@@ -1,16 +1,16 @@
 package com.demo.inventory.item.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Category")
 @Entity
+@Builder
 public class Category {
 
     @Id

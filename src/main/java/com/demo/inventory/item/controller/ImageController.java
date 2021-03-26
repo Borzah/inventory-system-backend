@@ -1,5 +1,6 @@
 package com.demo.inventory.item.controller;
 
+import com.demo.inventory.item.dto.ImageDto;
 import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.service.ImageService;
 import com.demo.inventory.security.Roles;
@@ -21,9 +22,9 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping("{imageId}")
-    public Image addImage(@PathVariable Long imageId,
-                          @RequestParam("imageFile") MultipartFile file,
-                          @RequestHeader("Authorization") String authToken)
+    public ImageDto addImage(@PathVariable Long imageId,
+                             @RequestParam("imageFile") MultipartFile file,
+                             @RequestHeader("Authorization") String authToken)
             throws IOException {
         return imageService.addImage(imageId, file, authToken);
     }

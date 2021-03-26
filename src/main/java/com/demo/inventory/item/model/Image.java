@@ -1,9 +1,6 @@
 package com.demo.inventory.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "Image")
 @Entity
+@Builder
 public class Image {
 
     @Id
