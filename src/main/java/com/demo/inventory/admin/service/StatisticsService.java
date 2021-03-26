@@ -4,6 +4,7 @@ import com.demo.inventory.admin.dto.UserStatisticsResponse;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ItemRepository;
+import com.demo.inventory.security.DbRole;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -24,8 +26,10 @@ public class StatisticsService {
 
     public List<UserStatisticsResponse> getUserStatistics() {
         List<UserStatisticsResponse> result = new ArrayList<>();
-        List<User> users = userRepository.findAll();
-        users.remove(0);
+        List<User> allUsers = userRepository.findAll();
+        List<User> users = allUsers.stream()
+                .filter(u -> !u.getRole().equals(DbRole.ADMIN))
+                .collect(Collectors.toList());
         users.forEach(user -> {
             UserStatisticsResponse response = getStatisticsResponseByUser(user);
             result.add(response);
