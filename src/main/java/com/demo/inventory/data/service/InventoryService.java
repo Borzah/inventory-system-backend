@@ -4,21 +4,15 @@ import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.dto.FolderDto;
-import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
-import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.model.Item;
-import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
-import com.demo.inventory.item.repository.ImageRepository;
 import com.demo.inventory.item.repository.ItemRepository;
 import com.demo.inventory.item.service.FolderService;
 import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
