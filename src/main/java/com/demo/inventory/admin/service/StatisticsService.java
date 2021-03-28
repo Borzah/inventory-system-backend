@@ -47,7 +47,7 @@ public class StatisticsService {
         Date userLastItemAddedAt = null;
         if (userNumOfItems > 0) {
             userItems.sort(Comparator.comparing(Item::getDateAdded));
-            userLastItemAddedAt = userItems.get(0).getDateAdded();
+            userLastItemAddedAt = userItems.get(userItems.size() - 1).getDateAdded();
         }
         return UserStatisticsResponse
                 .builder()

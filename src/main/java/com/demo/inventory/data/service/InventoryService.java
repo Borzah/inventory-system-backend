@@ -1,9 +1,12 @@
 package com.demo.inventory.data.service;
 
 import com.demo.inventory.data.dto.FolderResponse;
+import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
+import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.dto.FolderDto;
+import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.FolderRepository;
@@ -13,7 +16,9 @@ import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,5 +63,18 @@ public class InventoryService {
                 currentFolderPathName,
                 folders,
                 items);
+    }
+
+    public Map<String, List<ItemNodeResponse>> getItemsByCategory(List<CategoryDto> categories,
+                                                                  String authToken) {
+        Map<String, List<ItemNodeResponse>> result = new HashMap<>();
+        categories.forEach(category -> {
+            authChecker.checkUserAttachingTheirInfo(category.getUserId(), authToken);
+            List<ItemNodeResponse> items = itemRepository.findAllByCategoryId(category.getCategoryId()).stream()
+                    .map(inventoryUtils::createItemNodeResponse)
+                    .collect(Collectors.toList());
+            result.put(category.getCategoryName(), items);
+        });
+        return result;
     }
 }

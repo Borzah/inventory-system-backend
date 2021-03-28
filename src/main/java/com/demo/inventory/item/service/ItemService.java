@@ -28,7 +28,7 @@ public class ItemService {
         if (itemDto.getFolderId() != null) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
-        checkNameForDuplicates(itemDto, userId);
+        // checkNameForDuplicates(itemDto, userId);
         Item item = createItemFromDto(itemDto);
         return convertItem(itemRepository.save(item));
     }
@@ -51,7 +51,7 @@ public class ItemService {
         if (itemDto.getFolderId() != null) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
-        checkNameForDuplicates(itemDto, userId);
+        // checkNameForDuplicates(itemDto, userId);
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
         return convertItem(itemRepository.save(item));

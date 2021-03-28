@@ -1,6 +1,7 @@
 package com.demo.inventory.data.utils;
 
 import com.demo.inventory.data.dto.FolderResponse;
+import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Category;
@@ -24,6 +25,10 @@ public class InventoryUtils {
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
     private final FolderRepository folderRepository;
+
+    public ItemNodeResponse createItemNodeResponse(Item item) {
+        return new ItemNodeResponse(item.getItemId(), item.getItemName());
+    }
 
     public ItemResponse createItemResponse(Item item) {
         byte[] imageBytes = new byte[]{};
