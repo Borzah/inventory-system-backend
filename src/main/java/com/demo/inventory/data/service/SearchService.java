@@ -1,5 +1,6 @@
 package com.demo.inventory.data.service;
 
+import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Item;
@@ -20,76 +21,56 @@ public class SearchService {
     private final InventoryUtils inventoryUtils;
     private final AuthChecker authChecker;
 
-    public List<ItemResponse> getAllUsersItemResponses(Long userId, String attribute, String search, String authToken) {
+    public List<ItemNodeResponse> getAllUsersItemNodes(Long userId, String attribute, String search, String authToken) {
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        List<ItemResponse> items = getItemsByAttributeAndUserId(userId, "name");
-        List<ItemResponse> result = new ArrayList<>();
-        if (attribute != null) {
-            items = getItemsByAttributeAndUserId(userId, attribute);
-            if (search != null) {
-                return searchAndReturnItems(search, items, result, attribute);
-            }
-        }
-        if (search == null) {
-            return items;
-        }
-        return searchAndReturnItems(search, items, result, "all");
-    }
-
-    private List<ItemResponse> getItemsByAttributeAndUserId(Long userId, String parameter) {
+        if (attribute == null) attribute = "";
         List<Item> items = new ArrayList<>();
-        switch (parameter) {
+        switch (attribute) {
             case "category":
-                items = itemRepository.findAllByUserIdAndCategoryIdNotNull(userId);
+                if (search != null) {
+                    items = itemRepository.searchForItemsByCategory(userId, search.toLowerCase());
+                } else {
+                    items = itemRepository.findAllByUserIdAndCategoryIdNotNull(userId);
+                }
                 break;
             case "serialNumber":
-                items = itemRepository.findAllByUserIdAndSerialNumberNotNull(userId);
+                if (search != null) {
+                    items = itemRepository.searchForSerialNumberContainingAndUserId(search.toLowerCase(), userId);
+                } else {
+                    items = itemRepository.findAllByUserIdAndSerialNumberNotNull(userId);
+                }
                 break;
             case "description":
-                items = itemRepository.findAllByUserIdAndDescriptionNotNull(userId);
+                if (search != null) {
+                    items = itemRepository.searchForDescriptionContainingAndUserId(search.toLowerCase(), userId);
+                } else {
+                    items = itemRepository.findAllByUserIdAndDescriptionNotNull(userId);
+                }
                 break;
             case "price":
-                items = itemRepository.findAllByUserIdAndItemPriceNotNull(userId);
+                if (search != null) {
+                    items = itemRepository.searchForItemPriceAndUserId(search, userId);
+                } else {
+                    items = itemRepository.findAllByUserIdAndItemPriceNotNull(userId);
+                }
+                break;
+            case "name":
+                if (search != null) {
+                    items = itemRepository.searchForItemNameContainingAndUserId(search.toLowerCase(), userId);
+                } else {
+                    items = itemRepository.findAllByUserId(userId);
+                }
                 break;
             default:
-                items = itemRepository.findAllByUserId(userId);
+                if (search != null) {
+                    items = itemRepository.searchForItemsByALlFields(userId, search.toLowerCase());
+                } else {
+                    items = itemRepository.findAllByUserId(userId);
+                }
                 break;
         }
         return items.stream()
-                .map(inventoryUtils::createItemResponse)
+                .map(inventoryUtils::createItemNodeResponse)
                 .collect(Collectors.toList());
-    }
-
-    private List<ItemResponse> searchAndReturnItems(String search, List<ItemResponse> items, List<ItemResponse> result, String parameter) {
-        String replacedInput = search.replace("_", " ");
-        items.forEach(item -> {
-            if (isMatchedWithCriteria(replacedInput, item, parameter)) {
-                result.add(item);
-            }
-        });
-        return result;
-    }
-
-    private boolean isMatchedWithCriteria(String search, ItemResponse item, String parameter) {
-        switch (parameter) {
-            case "category":
-                return item.getCategoryName().toLowerCase().contains(search.toLowerCase());
-            case "serialNumber":
-                return item.getSerialNumber().toLowerCase().contains(search.toLowerCase());
-            case "description":
-                return item.getDescription().toLowerCase().contains(search.toLowerCase());
-            case "price":
-                return Float.toString(item.getItemPrice()).equals(search);
-            case "name":
-                return item.getItemName().toLowerCase().contains(search.toLowerCase());
-            default:
-                return item.getItemName().toLowerCase().contains(search.toLowerCase()) || item.getFolderName() != null
-                        && item.getFolderName().toLowerCase().contains(search.toLowerCase()) ||
-                        item.getCategoryName() != null && item.getCategoryName().toLowerCase().contains(search.toLowerCase())
-                        || item.getDescription() != null &&
-                        item.getDescription().toLowerCase().contains(search.toLowerCase()) ||
-                        item.getSerialNumber() != null && item.getSerialNumber().toLowerCase().contains(search.toLowerCase())
-                        || item.getItemPrice() != null && Float.toString(item.getItemPrice()).contains(search);
-        }
     }
 }

@@ -9,6 +9,7 @@ import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
+import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ItemRepository;
 import com.demo.inventory.item.service.FolderService;
@@ -27,6 +28,7 @@ public class InventoryService {
 
     private final ItemRepository itemRepository;
     private final FolderRepository folderRepository;
+    private final CategoryRepository categoryRepository;
     private final FolderService folderService;
     private final InventoryUtils inventoryUtils;
     private final AuthChecker authChecker;
@@ -48,26 +50,24 @@ public class InventoryService {
         Long currentFolderId = folder;
         Long parentFolderId = null;
         String currentFolderPathName = "My-items";
-        String currentFolderName = "My-Items";
         if (folder != null) {
             Folder currentFolder = folderRepository.findByFolderId(folder);
             parentFolderId = currentFolder.getParentId();
-            currentFolderName = currentFolder.getFolderName();
             List<Folder> possibleParents = folderRepository.findAllByUserIdAndFolderIdIsLessThan(user, folder);
             currentFolderPathName = inventoryUtils.getFolderPathName(possibleParents, currentFolder);
         }
         return inventoryUtils.createFolderResponse(
                 currentFolderId,
                 parentFolderId,
-                currentFolderName,
                 currentFolderPathName,
                 folders,
                 items);
     }
 
-    public Map<String, List<ItemNodeResponse>> getItemsByCategory(List<CategoryDto> categories,
+    public Map<String, List<ItemNodeResponse>> getItemsByCategory(Long userId,
                                                                   String authToken) {
         Map<String, List<ItemNodeResponse>> result = new HashMap<>();
+        List<Category> categories = categoryRepository.findAllByUserId(userId);
         categories.forEach(category -> {
             authChecker.checkUserAttachingTheirInfo(category.getUserId(), authToken);
             List<ItemNodeResponse> items = itemRepository.findAllByCategoryId(category.getCategoryId()).stream()

@@ -87,14 +87,12 @@ public class InventoryUtils {
 
     public FolderResponse createFolderResponse(Long currentFolderId,
                                                Long parentFolderId,
-                                               String currentFolderName,
                                                String currentFolderPathName,
                                                List<FolderDto> folders,
                                                List<ItemResponse> items) {
         return FolderResponse.builder()
                 .currentFolderId(currentFolderId)
                 .parentFolderId(parentFolderId)
-                .currentFolderName(currentFolderName)
                 .currentFolderPathName(currentFolderPathName)
                 .folders(folders)
                 .items(items).build();

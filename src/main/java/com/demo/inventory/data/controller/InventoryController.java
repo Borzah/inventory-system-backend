@@ -37,17 +37,17 @@ public class InventoryController {
         return inventoryService.getItemResponseByItemId(itemId, authToken);
     }
 
+    @GetMapping("user/{userId}/categories")
+    public Map<String, List<ItemNodeResponse>> getItemsByCategory(@PathVariable Long userId,
+                                                                  @RequestHeader("Authorization") String authToken) {
+        return inventoryService.getItemsByCategory(userId, authToken);
+    }
+
     @GetMapping("user/{userId}")
-    public List<ItemResponse> getAllUsersItemResponses(@PathVariable Long userId,
+    public List<ItemNodeResponse> getAllUsersItemNodes(@PathVariable Long userId,
                                                        @RequestParam(required = false) String attribute,
                                                        @RequestParam(required = false) String search,
                                                        @RequestHeader("Authorization") String authToken) {
-        return searchService.getAllUsersItemResponses(userId, attribute, search, authToken);
-    }
-
-    @GetMapping("categories")
-    public Map<String, List<ItemNodeResponse>> getItemsByCategory(@RequestBody List<CategoryDto> categories,
-                                                                  @RequestHeader("Authorization") String authToken) {
-        return inventoryService.getItemsByCategory(categories, authToken);
+        return searchService.getAllUsersItemNodes(userId, attribute, search, authToken);
     }
 }
