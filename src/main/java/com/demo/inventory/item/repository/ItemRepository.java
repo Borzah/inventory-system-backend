@@ -50,7 +50,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
         "(Lower(i.itemName) LIKE %:search% " +
         "OR Lower(i.serialNumber) LIKE %:search% " +
         "OR Lower(i.description) LIKE %:search% " +
-        "OR CONCAT(i.itemPrice, '') LIKE %:search%) " +
-        "OR c.categoryId = i.categoryId AND Lower(c.categoryName) LIKE %:search%")
+        "OR CONCAT(i.itemPrice, '') LIKE %:search% " +
+        "OR c.categoryId = i.categoryId AND Lower(c.categoryName) LIKE %:search%)")
     List<Item> searchForItemsByALlFields(Long userId, String search);
 }

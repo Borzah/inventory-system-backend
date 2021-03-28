@@ -1,5 +1,6 @@
 package com.demo.inventory.data;
 
+import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.SearchService;
 import com.demo.inventory.data.utils.InventoryUtils;
@@ -32,7 +33,7 @@ public class SearchServiceTest {
 
     private Item testItem;
 
-    private ItemResponse testItemResponse;
+    private ItemNodeResponse testItemResponse;
 
     private SearchService searchService;
 
@@ -40,18 +41,18 @@ public class SearchServiceTest {
     void setUp() {
         searchService = new SearchService(itemRepository, inventoryUtils, authChecker);
         testItem = new Item(1L, "test", 1L, 1L, 1L, new Date(), "test description", "12345", 12.99f);
-        testItemResponse = new ItemResponse(1L, "test", 1L, "testFolder", 1L, "categoryTest", new Date(), "descriptionTest", "12345", 12.99f, new byte[]{});
+        testItemResponse = new ItemNodeResponse(1L, "test");
     }
 
     @Test
     void searchForItemsTest() {
-        when(itemRepository.findAllByUserIdAndCategoryIdNotNull(1L)).thenReturn(List.of(
+        when(itemRepository.searchForItemNameContainingAndUserId("te", 1L)).thenReturn(List.of(
                 testItem
         ));
-        when(inventoryUtils.createItemResponse(testItem)).thenReturn(testItemResponse);
-        assertThat(searchService.getAllUsersItemResponses(1L,"category", "cat", ""))
+        when(inventoryUtils.createItemNodeResponse(testItem)).thenReturn(testItemResponse);
+        assertThat(searchService.getAllUsersItemNodes(1L,"name", "te", ""))
                 .isEqualTo(List.of(testItemResponse));
-        assertThat(searchService.getAllUsersItemResponses(1L,"category", "unknown", ""))
+        assertThat(searchService.getAllUsersItemNodes(1L,"name", "unknown", ""))
                 .isEqualTo(List.of());
     }
 }

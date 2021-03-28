@@ -89,7 +89,7 @@ public class InventoryUtils {
                                                Long parentFolderId,
                                                String currentFolderPathName,
                                                List<FolderDto> folders,
-                                               List<ItemResponse> items) {
+                                               List<ItemNodeResponse> items) {
         return FolderResponse.builder()
                 .currentFolderId(currentFolderId)
                 .parentFolderId(parentFolderId)

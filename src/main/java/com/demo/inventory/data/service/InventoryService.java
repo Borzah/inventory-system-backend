@@ -44,8 +44,8 @@ public class InventoryService {
         List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(user, folder).stream()
                 .map(folderService::convertFolder)
                 .collect(Collectors.toList());
-        List<ItemResponse> items = itemRepository.findAllByUserIdAndFolderId(user, folder).stream()
-                .map(inventoryUtils::createItemResponse)
+        List<ItemNodeResponse> items = itemRepository.findAllByUserIdAndFolderId(user, folder).stream()
+                .map(inventoryUtils::createItemNodeResponse)
                 .collect(Collectors.toList());
         Long currentFolderId = folder;
         Long parentFolderId = null;

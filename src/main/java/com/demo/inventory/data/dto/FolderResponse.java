@@ -15,6 +15,6 @@ public class FolderResponse {
     private Long currentFolderId;
     private Long parentFolderId;
     private String currentFolderPathName;
-    private List<ItemResponse> items;
+    private List<ItemNodeResponse> items;
     private List<FolderDto> folders;
 }
