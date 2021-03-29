@@ -77,10 +77,11 @@ public class InventoryUtils {
         }
         Collections.reverse(resultString);
         StringBuilder sb = new StringBuilder();
-        sb.append("My-Items/");
+        sb.append("My-Items /");
         for (String s : resultString) {
+            sb.append(" ");
             sb.append(s);
-            sb.append("/");
+            sb.append(" /");
         }
         return sb.toString();
     }
