@@ -6,6 +6,8 @@ import com.demo.inventory.security.MyUser;
 import com.demo.inventory.security.UserTokenHolder;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
+import com.demo.inventory.user.model.User;
+import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserTokenHolder userTokenHolder;
     private final AuthChecker authChecker;
+    private final UserRepository userRepository;
 
     public LoginResponse login(LoginDto loginDto) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
@@ -40,6 +43,18 @@ public class AuthService {
     public void logout(Long userId, String authToken) {
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         userTokenHolder.removeToken(userId);
+    }
+
+    public LoginResponse getUserDataByToken(String authToken) {
+        String token = authToken.substring(7);
+        Long userId = jwtTokenProvider.getUserIdFromToken(token);
+        User user = userRepository.findUserByUserId(userId);
+        return LoginResponse.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .token(token)
+                .role(user.getRole())
+                .build();
     }
 }
 

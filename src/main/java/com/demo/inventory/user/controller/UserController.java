@@ -41,6 +41,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @GetMapping("data")
+    public LoginResponse getUserDataByToken(@RequestHeader("Authorization") String authToken) {
+        return authService.getUserDataByToken(authToken);
+    }
+
     @GetMapping(path = "{userId}")
     public User getUser(@PathVariable Long userId) {
         return userService.getUser(userId);
