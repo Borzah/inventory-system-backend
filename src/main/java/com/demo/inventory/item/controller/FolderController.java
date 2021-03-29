@@ -1,8 +1,6 @@
 package com.demo.inventory.item.controller;
 
-import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.dto.FolderDto;
-import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.service.FolderService;

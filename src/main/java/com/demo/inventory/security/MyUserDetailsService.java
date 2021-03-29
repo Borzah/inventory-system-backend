@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,9 +41,6 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     private Stream<DbRole> getRoles(User user) {
-//        if (user.getRole().isAdmin()) {
-//            return Arrays.stream(DbRole.values());
-//        }
         return Stream.of(user.getRole());
     }
 }

@@ -5,7 +5,6 @@ import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.InventoryService;
 import com.demo.inventory.data.service.SearchService;
-import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;

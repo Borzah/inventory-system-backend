@@ -1,7 +1,6 @@
 package com.demo.inventory.data.service;
 
 import com.demo.inventory.data.dto.ItemNodeResponse;
-import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ItemRepository;

@@ -4,7 +4,6 @@ import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
-import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;

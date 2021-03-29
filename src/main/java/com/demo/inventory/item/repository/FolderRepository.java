@@ -1,7 +1,6 @@
 package com.demo.inventory.item.repository;
 
 import com.demo.inventory.item.model.Folder;
-import lombok.extern.java.Log;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,5 @@
 package com.demo.inventory.user.controller;
 
-import com.demo.inventory.security.Roles;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
 import com.demo.inventory.user.dto.RegisterDto;
@@ -10,7 +9,6 @@ import com.demo.inventory.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

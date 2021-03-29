@@ -67,13 +67,20 @@ public class InventoryServiceTest {
         Item item = Item.builder().itemId(1L).itemName("test").dateAdded(date).build();
         ItemNodeResponse itemNode = new ItemNodeResponse(1L, "test");
 
+        when(folderRepository.findAllByUserIdAndParentId(1L, 1L)).thenReturn(
+                List.of(folder2, folder3)
+        );
+
+        when(itemRepository.findAllByUserIdAndFolderId(1L, 1L)).thenReturn(
+                List.of(item)
+        );
+
         when(inventoryUtils.createItemNodeResponse(item)).thenReturn(
                 itemNode
         );
 
-        when(folderRepository.findAllByUserIdAndParentId(1L, 1L)).thenReturn(
-                List.of(folder2, folder3)
-        );
+        when(folderService.convertFolder(folder2)).thenReturn(folderDto2);
+        when(folderService.convertFolder(folder3)).thenReturn(folderDto3);
 
         when(folderRepository.findByFolderId(1L)).thenReturn(folder1);
         when(folderRepository.findAllByUserIdAndFolderIdIsLessThan(1L, 1L))
@@ -88,6 +95,13 @@ public class InventoryServiceTest {
                 .currentFolderPathName("My-Items/test1/")
                 .folders(List.of(folderDto2, folderDto3))
                 .items(List.of(itemNode)).build();
+
+        when(inventoryUtils.createFolderResponse(
+                1L,
+                null,
+                "My-Items/test1/",
+                List.of(folderDto2, folderDto3),
+                List.of(itemNode))).thenReturn(expected);
 
         FolderResponse actual = inventoryService.getContentBySection(1L, 1L, "");
 
