@@ -38,7 +38,7 @@ public class ImageService {
         if (!allowedTypes.contains(file.getContentType())) {
             throw new ItemException("A file must be a image!");
         }
-        if (file.getSize() > 400000L) {
+        if (file.getSize() > 1000000L) {
             throw new ItemException("A file cannot be over 1 Mb");
         }
     }

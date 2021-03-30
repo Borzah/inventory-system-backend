@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -16,5 +17,7 @@ public class RegisterDto {
     @Email(message = "Must be valid email address!")
     private String username;
     @NotBlank(message = "Password must be not blank!")
+    @Size(max = 50, message
+            = "Password cannot be over 50 characters")
     private String password;
 }

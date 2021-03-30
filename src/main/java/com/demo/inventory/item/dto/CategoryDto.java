@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -15,6 +16,8 @@ public class CategoryDto {
     private Long categoryId;
     @NotNull(message = "User id cannot be null")
     private Long userId;
+    @Size(max = 40, message
+            = "Category name cannot be over 40 characters")
     @NotBlank(message = "Category name cannot be null or blank")
     private String categoryName;
 
