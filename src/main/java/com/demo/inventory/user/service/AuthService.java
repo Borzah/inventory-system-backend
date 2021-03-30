@@ -1,5 +1,6 @@
 package com.demo.inventory.user.service;
 
+import com.demo.inventory.exception.UserException;
 import com.demo.inventory.security.AuthChecker;
 import com.demo.inventory.security.JwtTokenProvider;
 import com.demo.inventory.security.MyUser;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,13 +50,17 @@ public class AuthService {
     public LoginResponse getUserDataByToken(String authToken) {
         String token = authToken.substring(7);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
-        User user = userRepository.findUserByUserId(userId);
-        return LoginResponse.builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .token(token)
-                .role(user.getRole())
-                .build();
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return LoginResponse.builder()
+                    .userId(user.getUserId())
+                    .username(user.getUsername())
+                    .token(token)
+                    .role(user.getRole())
+                    .build();
+        }
+        throw new UserException("User does not exist");
     }
 }
 

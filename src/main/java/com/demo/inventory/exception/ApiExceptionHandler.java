@@ -47,6 +47,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = RequestedObjectNotFoundException.class)
+    public ResponseEntity<Object> handleObjectNotFoundException(RequestedObjectNotFoundException e) {
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.NOT_FOUND,
+                ZonedDateTime.now());
+        return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleUserException(MethodArgumentNotValidException e) {
         String[] messages = e.getMessage().split(";");

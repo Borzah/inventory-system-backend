@@ -4,6 +4,8 @@ import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
+import com.demo.inventory.exception.ItemException;
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
@@ -13,12 +15,15 @@ import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ItemRepository;
 import com.demo.inventory.item.service.FolderService;
 import com.demo.inventory.security.AuthChecker;
+import javassist.NotFoundException;
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +38,13 @@ public class InventoryService {
     private final AuthChecker authChecker;
 
     public ItemResponse getItemResponseByItemId(Long itemId, String authToken) {
-        Item item = itemRepository.findByItemId(itemId);
-        authChecker.checkUserAttachingTheirInfo(item.getUserId(), authToken);
-        return inventoryUtils.createItemResponse(item);
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            authChecker.checkUserAttachingTheirInfo(item.getUserId(), authToken);
+            return inventoryUtils.createItemResponse(item);
+        }
+        throw new RequestedObjectNotFoundException(String.format("Item with id [%d] does not exist", itemId));
     }
 
     public FolderResponse getContentBySection(Long user, Long folder, String authToken) {
@@ -49,8 +58,12 @@ public class InventoryService {
         Long currentFolderId = folder;
         Long parentFolderId = null;
         String currentFolderPathName = "My-items";
-        if (folder != null) {
-            Folder currentFolder = folderRepository.findByFolderId(folder);
+        if (Optional.ofNullable(folder).isPresent()) {
+            Optional<Folder> currentFolderOptional = folderRepository.findById(folder);
+            if (currentFolderOptional.isEmpty()) {
+                throw new RequestedObjectNotFoundException(String.format("Folder with id [%d] does not exist", folder));
+            }
+            Folder currentFolder = currentFolderOptional.get();
             parentFolderId = currentFolder.getParentId();
             List<Folder> possibleParents = folderRepository.findAllByUserIdAndFolderIdIsLessThan(user, folder);
             currentFolderPathName = inventoryUtils.getFolderPathName(possibleParents, currentFolder);

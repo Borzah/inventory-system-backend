@@ -1,6 +1,7 @@
 package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.ItemException;
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.ItemDto;
 import com.demo.inventory.item.model.Item;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,11 +26,10 @@ public class ItemService {
     public ItemDto addItem(ItemDto itemDto, String authToken) {
         Long userId = itemDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        checkNamings(itemDto);
-        if (itemDto.getFolderId() != null) {
+        itemUtils.checkNamings(itemDto);
+        if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
-        // checkNameForDuplicates(itemDto, userId);
         Item item = createItemFromDto(itemDto);
         return convertItem(itemRepository.save(item));
     }
@@ -38,46 +39,35 @@ public class ItemService {
     }
 
     public ItemDto getItem(Long itemId, String authToken) {
-        Long userId = itemRepository.findByItemId(itemId).getUserId();
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
+        Item item = itemOptional.get();
+        Long userId = item.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        return convertItem(itemRepository.findByItemId(itemId));
+        return convertItem(item);
     }
 
     public ItemDto updateItem(Long itemId, ItemDto itemDto, String authToken) {
-        Item item = itemRepository.findByItemId(itemId);
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
+        Item item = itemOptional.get();
         Long userId = item.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        checkNamings(itemDto);
-        if (itemDto.getFolderId() != null) {
+        itemUtils.checkNamings(itemDto);
+        if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
-        // checkNameForDuplicates(itemDto, userId);
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
         return convertItem(itemRepository.save(item));
     }
 
     public void deleteItem(Long itemId, String authToken) {
-        Long userId = itemRepository.findByItemId(itemId).getUserId();
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
+        Long userId = itemOptional.get().getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemRepository.deleteById(itemId);
-    }
-
-    private void checkNamings(ItemDto itemDto) {
-        List<String> namings = new ArrayList<>();
-        namings.add(itemDto.getItemName());
-        if (itemDto.getSerialNumber() != null) namings.add(itemDto.getSerialNumber());
-        if (itemDto.getDescription() != null) namings.add(itemDto.getDescription());
-        itemUtils.checkNamingRegex(namings);
-    }
-
-    private void checkNameForDuplicates(ItemDto itemDto, Long userId) {
-        if (!itemRepository.findAllByItemNameAndFolderIdAndUserId(
-                itemDto.getItemName(),
-                itemDto.getFolderId(),
-                userId).isEmpty()) {
-            throw new ItemException("Item with such name is already in that folder");
-        }
     }
 
     private ItemDto convertItem(Item item) {

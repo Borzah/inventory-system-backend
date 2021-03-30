@@ -1,8 +1,10 @@
 package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.ItemException;
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.ImageDto;
 import com.demo.inventory.item.model.Image;
+import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ImageRepository;
 import com.demo.inventory.item.repository.ItemRepository;
 import com.demo.inventory.security.AuthChecker;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +25,12 @@ public class ImageService {
     private final AuthChecker authChecker;
 
     public ImageDto addImage(Long imageId, MultipartFile file, String authToken) throws IOException {
-        Long userId = itemRepository.findByItemId(imageId).getUserId();
+        Optional<Item> itemOptional = itemRepository.findById(imageId);
+        if (itemOptional.isEmpty()) {
+            throw new RequestedObjectNotFoundException(
+                    String.format("Item with id [%d] does not exist", imageId));
+        }
+        Long userId = itemOptional.get().getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         validateImage(file);
         Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();

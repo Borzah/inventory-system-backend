@@ -1,6 +1,7 @@
 package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.FolderException;
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Folder;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +26,7 @@ public class FolderService {
         Long userId = folderDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamingRegex(List.of(folderDto.getFolderName()));
-        if (folderDto.getParentId() != null) {
+        if (Optional.ofNullable(folderDto.getParentId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(folderDto.getParentId(), userId);
         }
         if (!folderRepository.findAllByFolderNameAndUserIdAndParentId(folderDto.getFolderName(), userId, folderDto.getParentId()).isEmpty()) {
@@ -40,7 +42,12 @@ public class FolderService {
     }
 
     public void deleteFolder(Long folderId, String authToken) {
-        Long userId = folderRepository.findByFolderId(folderId).getUserId();
+        Optional<Folder> folderOptional = folderRepository.findById(folderId);
+        if (folderOptional.isEmpty()) {
+            throw new RequestedObjectNotFoundException(
+                    String.format("Folder with id [%d] does not exist", folderId));
+        }
+        Long userId = folderOptional.get().getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         folderRepository.deleteById(folderId);
     }
