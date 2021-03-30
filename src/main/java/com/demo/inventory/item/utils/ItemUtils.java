@@ -30,7 +30,7 @@ public class ItemUtils {
 
     public void checkNamingRegex(List<String> namings) {
         namings.forEach(naming -> {
-            if (naming != null && naming.contains("_")) {
+            if (Optional.ofNullable(naming).isPresent() && naming.contains("_")) {
                 throw new ItemException("Attribute name cannot contain '_' sign");
             }
         });

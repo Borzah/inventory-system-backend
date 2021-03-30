@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -34,15 +35,15 @@ public class InventoryUtils {
         byte[] imageBytes = new byte[]{};
         String categoryName = null;
         String folderName = null;
-        Image image = imageRepository.findByImageId(item.getItemId());
-        if (image != null) {
-            imageBytes = image.getImageBytes();
+        Optional<Image> imageOptional = imageRepository.findById(item.getItemId());
+        if (imageOptional.isPresent()) {
+            imageBytes = imageOptional.get().getImageBytes();
         }
-        if (item.getCategoryId() != null) {
+        if (Optional.ofNullable(item.getCategoryId()).isPresent()) {
             Category category = categoryRepository.findByCategoryId(item.getCategoryId());
             categoryName = category.getCategoryName();
         }
-        if (item.getFolderId() != null) {
+        if (Optional.ofNullable(item.getFolderId()).isPresent()) {
             Folder folder = folderRepository.findByFolderId(item.getFolderId());
             folderName = folder.getFolderName();
         }
@@ -69,7 +70,8 @@ public class InventoryUtils {
         for (int i = 0; i < listLength; i++) {
             for (Folder f: searchableSpace) {
                 Long comparable = result.get(result.size()-1).getParentId();
-                if (f.getFolderId() != null  &&  f.getFolderId().equals(comparable)) {
+                if (Optional.ofNullable(f.getFolderId()).isPresent()
+                        &&  f.getFolderId().equals(comparable)) {
                     result.add(f);
                     resultString.add(f.getFolderName());
                 }
