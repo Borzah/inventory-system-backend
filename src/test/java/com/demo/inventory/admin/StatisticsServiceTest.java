@@ -2,6 +2,7 @@ package com.demo.inventory.admin;
 
 import com.demo.inventory.admin.dto.UserStatisticsResponse;
 import com.demo.inventory.admin.service.StatisticsService;
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.FolderRepository;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class StatisticsServiceTest {
+
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
 
     @MockBean
     private UserRepository userRepository;

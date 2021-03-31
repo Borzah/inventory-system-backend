@@ -12,10 +12,18 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "user-config")
 public class UserProperties {
 
-    private String username;
+    private String adminUsername;
+    private String firstUsername;
+    private String secondUsername;
+    private String thirdUsername;
+    private String fourthUsername;
     private String password;
 
-    public DbRole getRole() {
+    public DbRole getAdminRole() {
         return DbRole.ADMIN;
+    }
+
+    public DbRole getUserRole() {
+        return DbRole.USER;
     }
 }
