@@ -26,19 +26,19 @@ public class ImageService {
 
     public ImageDto addImage(Long imageId, MultipartFile file, String authToken) throws IOException {
         Optional<Item> itemOptional = itemRepository.findById(imageId);
+
         if (itemOptional.isEmpty()) {
             throw new RequestedObjectNotFoundException(
                     String.format("Item with id [%d] does not exist", imageId));
         }
+
         Long userId = itemOptional.get().getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         validateImage(file);
-        Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();
-        return convertImage(imageRepository.save(image));
-    }
 
-    public List<Image> getAllImages() {
-        return imageRepository.findAll();
+        Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();
+
+        return convertImage(imageRepository.save(image));
     }
 
     private void validateImage(MultipartFile file) {
@@ -52,6 +52,9 @@ public class ImageService {
     }
 
     private ImageDto convertImage(Image image) {
-        return ImageDto.builder().imageId(image.getImageId()).imageBytes(image.getImageBytes()).build();
+        return ImageDto.builder()
+                .imageId(image.getImageId())
+                .imageBytes(image.getImageBytes())
+                .build();
     }
 }

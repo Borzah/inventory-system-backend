@@ -1,5 +1,6 @@
 package com.demo.inventory.utils;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.model.Folder;
@@ -20,6 +21,9 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ItemUtilsTest {
+
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
 
     @MockBean
     private FolderRepository folderRepository;
@@ -44,7 +48,9 @@ public class ItemUtilsTest {
     void itShouldPassUserAddingItemOrFolderIntoTheirFolder() {
         when(folderRepository.findAllByFolderIdAndUserId(1L, 2L))
                 .thenReturn(List.of(new Folder("test", 0L, 2L)));
-        assertDoesNotThrow(() -> itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(1L, 2L));
+
+        assertDoesNotThrow(() ->
+                itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(1L, 2L));
     }
 
     @Test

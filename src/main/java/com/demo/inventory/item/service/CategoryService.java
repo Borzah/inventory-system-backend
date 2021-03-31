@@ -20,12 +20,6 @@ public class CategoryService {
     private final AuthChecker authChecker;
     private final ItemUtils itemUtils;
 
-    public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(this::convertCategory)
-                .collect(Collectors.toList());
-    }
-
     public List<CategoryDto> getAllCategoriesByUserId(Long userId, String authToken) {
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         return categoryRepository.findAllByUserId(userId).stream()
@@ -37,10 +31,13 @@ public class CategoryService {
         Long userId = categoryDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamingRegex(List.of(categoryDto.getCategoryName()));
+
         if (!categoryRepository.findAllByUserIdAndCategoryName(userId, categoryDto.getCategoryName()).isEmpty()) {
             throw new ItemException("Category with such name is already present");
         }
+
         Category category = new Category(userId, categoryDto.getCategoryName());
+
         return convertCategory(categoryRepository.save(category));
     }
 

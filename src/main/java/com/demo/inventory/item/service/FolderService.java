@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,46 +25,45 @@ public class FolderService {
         Long userId = folderDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamingRegex(List.of(folderDto.getFolderName()));
+
         if (Optional.ofNullable(folderDto.getParentId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(folderDto.getParentId(), userId);
         }
         if (!folderRepository.findAllByFolderNameAndUserIdAndParentId(folderDto.getFolderName(), userId, folderDto.getParentId()).isEmpty()) {
             throw new FolderException("Folder with such name already exists in this section");
         }
-        return convertFolder(folderRepository.save(createFolderFromFolderDto(folderDto)));
-    }
 
-    public List<FolderDto> getAllFolders() {
-        return folderRepository.findAll().stream()
-                .map(this::convertFolder)
-                .collect(Collectors.toList());
+        return convertFolder(folderRepository.save(createFolderFromFolderDto(folderDto)));
     }
 
     public void deleteFolder(Long folderId, String authToken) {
         Optional<Folder> folderOptional = folderRepository.findById(folderId);
+
         if (folderOptional.isEmpty()) {
             throw new RequestedObjectNotFoundException(
                     String.format("Folder with id [%d] does not exist", folderId));
         }
+
         Long userId = folderOptional.get().getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
+
         folderRepository.deleteById(folderId);
     }
 
     public FolderDto convertFolder(Folder folder) {
-        FolderDto folderDto = new FolderDto();
-        folderDto.setFolderId(folder.getFolderId());
-        folderDto.setFolderName(folder.getFolderName());
-        folderDto.setUserId(folder.getUserId());
-        folderDto.setParentId(folder.getParentId());
-        return folderDto;
+        return FolderDto.builder()
+                .folderId(folder.getFolderId())
+                .folderName(folder.getFolderName())
+                .userId(folder.getUserId())
+                .parentId(folder.getParentId())
+                .build();
     }
 
     private Folder createFolderFromFolderDto(FolderDto folderDto) {
-        Folder folder = new Folder();
-        folder.setFolderName(folderDto.getFolderName());
-        folder.setUserId(folderDto.getUserId());
-        folder.setParentId(folderDto.getParentId());
-        return folder;
+        return Folder.builder()
+                .folderName(folderDto.getFolderName())
+                .userId(folderDto.getUserId())
+                .parentId(folderDto.getParentId())
+                .build();
     }
 }

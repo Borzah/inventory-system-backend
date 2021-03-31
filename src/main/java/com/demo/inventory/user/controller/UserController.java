@@ -3,7 +3,6 @@ package com.demo.inventory.user.controller;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
 import com.demo.inventory.user.dto.RegisterDto;
-import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.service.AuthService;
 import com.demo.inventory.user.service.UserService;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,8 @@ public class UserController {
     }
 
     @PostMapping("logout/{userId}")
-    public ResponseEntity<Void> logout(@PathVariable Long userId, @RequestHeader("Authorization") String authToken) {
+    public ResponseEntity<Void> logout(@PathVariable Long userId,
+                                       @RequestHeader("Authorization") String authToken) {
         authService.logout(userId, authToken);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -42,15 +42,5 @@ public class UserController {
     @GetMapping("data")
     public LoginResponse getUserDataByToken(@RequestHeader("Authorization") String authToken) {
         return authService.getUserDataByToken(authToken);
-    }
-
-    @GetMapping(path = "{userId}")
-    public User getUser(@PathVariable Long userId) {
-        return userService.getUser(userId);
-    }
-
-    @GetMapping
-    public Iterable<User> getAllUsers() {
-        return userService.getAllUsers();
     }
 }

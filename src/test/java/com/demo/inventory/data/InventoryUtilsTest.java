@@ -1,5 +1,6 @@
 package com.demo.inventory.data;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.CategoryRepository;
@@ -17,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryUtilsTest {
 
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
     @MockBean
     private ImageRepository imageRepository;
     @MockBean

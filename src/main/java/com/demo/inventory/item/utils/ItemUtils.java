@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +45,10 @@ public class ItemUtils {
     public void checkNamings(ItemDto itemDto) {
         List<String> namings = new ArrayList<>();
         namings.add(itemDto.getItemName());
+
         if (itemDto.getSerialNumber() != null) namings.add(itemDto.getSerialNumber());
         if (itemDto.getDescription() != null) namings.add(itemDto.getDescription());
+
         checkNamingRegex(namings);
     }
 }

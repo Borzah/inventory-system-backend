@@ -30,10 +30,14 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public LoginResponse login(LoginDto loginDto) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
+            );
+
         MyUser myUser = (MyUser) authenticate.getPrincipal();
         String token = jwtTokenProvider.generateToken(myUser);
         userTokenHolder.addToken(myUser.getId(), token);
+
         return LoginResponse.builder()
                 .userId(myUser.getId())
                 .username(myUser.getUsername())
@@ -51,6 +55,7 @@ public class AuthService {
         String token = authToken.substring(7);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
         Optional<User> userOptional = userRepository.findById(userId);
+
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             return LoginResponse.builder()

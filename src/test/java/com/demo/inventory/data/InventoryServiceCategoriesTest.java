@@ -1,5 +1,6 @@
 package com.demo.inventory.data;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.service.InventoryService;
 import com.demo.inventory.data.utils.InventoryUtils;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryServiceCategoriesTest {
 
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
     @MockBean
     private ItemRepository itemRepository;
     @MockBean
@@ -58,10 +60,13 @@ public class InventoryServiceCategoriesTest {
     @Test
     void ShouldReturnValidItemsByCategories() {
         Timestamp date = new Timestamp(System.currentTimeMillis());
+
         Category category1 = Category.builder().categoryId(1L).userId(1L).categoryName("test1").build();
         Category category2 = Category.builder().categoryId(2L).userId(1L).categoryName("test2").build();
+
         Item item1 = Item.builder().itemId(1L).itemName("testItem1").dateAdded(date).build();
         Item item2 = Item.builder().itemId(2L).itemName("testItem2").dateAdded(date).build();
+
         ItemNodeResponse itemNode1 = new ItemNodeResponse(1L, "testItem1");
         ItemNodeResponse itemNode2 = new ItemNodeResponse(2L, "testItem2");
 

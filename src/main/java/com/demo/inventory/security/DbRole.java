@@ -1,6 +1,7 @@
 package com.demo.inventory.security;
 
 public enum DbRole {
+
     USER, ADMIN;
 
     public boolean isAdmin() {

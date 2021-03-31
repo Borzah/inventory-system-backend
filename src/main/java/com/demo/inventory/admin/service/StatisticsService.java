@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +27,16 @@ public class StatisticsService {
     public List<UserStatisticsResponse> getUserStatistics() {
         List<UserStatisticsResponse> result = new ArrayList<>();
         List<User> allUsers = userRepository.findAll();
+
         List<User> users = allUsers.stream()
                 .filter(u -> !u.getRole().equals(DbRole.ADMIN))
                 .collect(Collectors.toList());
+
         users.forEach(user -> {
             UserStatisticsResponse response = getStatisticsResponseByUser(user);
             result.add(response);
         });
+
         return result;
     }
 
@@ -42,14 +44,17 @@ public class StatisticsService {
         String username = user.getUsername();
         Long userId = user.getUserId();
         Timestamp userRegisteredAt = user.getDateRegistered();
+
         List<Item> userItems = itemRepository.findAllByUserId(userId);
         int userNumOfItems = userItems.size();
         int userNumOfFolders = folderRepository.findAllByUserId(userId).size();
+
         Timestamp userLastItemAddedAt = null;
         if (userNumOfItems > 0) {
             userItems.sort(Comparator.comparing(Item::getDateAdded));
             userLastItemAddedAt = userItems.get(userItems.size() - 1).getDateAdded();
         }
+
         return UserStatisticsResponse
                 .builder()
                 .username(username)

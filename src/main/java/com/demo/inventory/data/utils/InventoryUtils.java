@@ -35,18 +35,22 @@ public class InventoryUtils {
         byte[] imageBytes = new byte[]{};
         String categoryName = null;
         String folderName = null;
+
         Optional<Image> imageOptional = imageRepository.findById(item.getItemId());
         if (imageOptional.isPresent()) {
             imageBytes = imageOptional.get().getImageBytes();
         }
+
         if (Optional.ofNullable(item.getCategoryId()).isPresent()) {
             Category category = categoryRepository.findByCategoryId(item.getCategoryId());
             categoryName = category.getCategoryName();
         }
+
         if (Optional.ofNullable(item.getFolderId()).isPresent()) {
             Folder folder = folderRepository.findByFolderId(item.getFolderId());
             folderName = folder.getFolderName();
         }
+
         return ItemResponse.builder()
                 .itemId(item.getItemId())
                 .itemName(item.getItemName())
@@ -66,6 +70,7 @@ public class InventoryUtils {
         List<String> resultString = new ArrayList<>();
         result.add(currentFolder);
         resultString.add(currentFolder.getFolderName());
+
         int listLength = searchableSpace.size();
         for (int i = 0; i < listLength; i++) {
             for (Folder f: searchableSpace) {
@@ -77,6 +82,7 @@ public class InventoryUtils {
                 }
             }
         }
+
         Collections.reverse(resultString);
         StringBuilder sb = new StringBuilder();
         sb.append("My-Items /");
@@ -85,6 +91,7 @@ public class InventoryUtils {
             sb.append(s);
             sb.append(" /");
         }
+
         return sb.toString();
     }
 

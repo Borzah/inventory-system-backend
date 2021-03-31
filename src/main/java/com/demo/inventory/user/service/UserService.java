@@ -32,25 +32,5 @@ public class UserService {
         user.setDateRegistered(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
     }
-
-    public String getUsernameById(Long userId) {
-        return userRepository.findUserByUserId(userId).getUsername();
-    }
-
-    public Long getUserIdByUsername(String username) {
-        return userRepository.findUserByUsername(username).getUserId();
-    }
-
-    public User getUser(Long userId) {
-        return userRepository.findUserByUserId(userId);
-    }
-
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public void deleteUser(Long userId) {
-        userRepository.deleteByUserId(userId);
-    }
 }
 

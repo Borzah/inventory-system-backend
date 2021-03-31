@@ -1,11 +1,10 @@
-package com.demo.inventory.item;
+package com.demo.inventory.item.service;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.exception.FolderException;
-import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
-import com.demo.inventory.item.service.FolderService;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.security.AuthChecker;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 public class FolderServiceTest {
+
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
 
     @MockBean
     private FolderRepository folderRepository;
@@ -45,6 +47,7 @@ public class FolderServiceTest {
     void shouldAddNotFolder() {
         when(folderRepository.findAllByFolderNameAndUserIdAndParentId("testFolder", 1L, 1L))
                 .thenReturn(List.of(folder));
+
         assertThatThrownBy(() -> folderService.addFolder(folderToAdd, ""))
                 .isInstanceOf(FolderException.class)
                 .hasMessageContaining("Folder with such name already exists in this section");

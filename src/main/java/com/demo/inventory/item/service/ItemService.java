@@ -1,7 +1,5 @@
 package com.demo.inventory.item.service;
 
-import com.demo.inventory.exception.ItemException;
-import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.ItemDto;
 import com.demo.inventory.item.model.Item;
@@ -11,9 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,46 +23,54 @@ public class ItemService {
         Long userId = itemDto.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamings(itemDto);
+
         if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
-        Item item = createItemFromDto(itemDto);
-        return convertItem(itemRepository.save(item));
-    }
 
-    public List<Item> getAllItems() {
-        return itemRepository.findAll();
+        Item item = createItemFromDto(itemDto);
+
+        return convertItem(itemRepository.save(item));
     }
 
     public ItemDto getItem(Long itemId, String authToken) {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
-        Item item = itemOptional.get();
+
+        Item item = itemOptional.get(); // optional isPresent is checked in utils method
         Long userId = item.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
+
         return convertItem(item);
     }
 
     public ItemDto updateItem(Long itemId, ItemDto itemDto, String authToken) {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
+
         itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
-        Item item = itemOptional.get();
+        Item item = itemOptional.get(); // optional isPresent is checked in utils method
         Long userId = item.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamings(itemDto);
+
         if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
             itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
         }
+
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
+
         return convertItem(itemRepository.save(item));
     }
 
     public void deleteItem(Long itemId, String authToken) {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
+
         itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
-        Long userId = itemOptional.get().getUserId();
+
+        Long userId = itemOptional.get().getUserId(); // optional isPresent is checked in utils method
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
+
         itemRepository.deleteById(itemId);
     }
 
@@ -81,7 +84,8 @@ public class ItemService {
                 .dateAdded(item.getDateAdded())
                 .description(item.getDescription())
                 .serialNumber(item.getSerialNumber())
-                .itemPrice(item.getItemPrice()).build();
+                .itemPrice(item.getItemPrice())
+                .build();
     }
 
     private Item createItemFromDto(ItemDto itemDto) {
@@ -94,6 +98,7 @@ public class ItemService {
                 .description(itemDto.getDescription())
                 .dateAdded(new Timestamp(System.currentTimeMillis()))
                 .serialNumber(itemDto.getSerialNumber())
-                .itemPrice(itemDto.getItemPrice()).build();
+                .itemPrice(itemDto.getItemPrice())
+                .build();
     }
 }

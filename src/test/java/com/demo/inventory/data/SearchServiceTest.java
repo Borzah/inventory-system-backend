@@ -1,7 +1,7 @@
 package com.demo.inventory.data;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.data.dto.ItemNodeResponse;
-import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.SearchService;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Item;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -22,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class SearchServiceTest {
+
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
 
     @MockBean
     private  ItemRepository itemRepository;
@@ -50,9 +52,12 @@ public class SearchServiceTest {
         when(itemRepository.searchForItemNameContainingAndUserId("te", 1L)).thenReturn(List.of(
                 testItem
         ));
+
         when(inventoryUtils.createItemNodeResponse(testItem)).thenReturn(testItemResponse);
+
         assertThat(searchService.getAllUsersItemNodes(1L,"name", "te", ""))
                 .isEqualTo(List.of(testItemResponse));
+
         assertThat(searchService.getAllUsersItemNodes(1L,"name", "unknown", ""))
                 .isEqualTo(List.of());
     }

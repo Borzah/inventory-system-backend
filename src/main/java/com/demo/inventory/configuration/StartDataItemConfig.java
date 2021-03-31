@@ -2,11 +2,9 @@ package com.demo.inventory.configuration;
 
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ItemRepository;
-import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.List;
 

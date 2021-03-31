@@ -23,8 +23,10 @@ public class SearchService {
 
     public List<ItemNodeResponse> getAllUsersItemNodes(Long userId, String attribute, String search, String authToken) {
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
+
         if (Optional.ofNullable(attribute).isEmpty()) attribute = "";
         List<Item> items = new ArrayList<>();
+
         switch (attribute) {
             case "category":
                 if (Optional.ofNullable(search).isPresent()) {
@@ -69,6 +71,7 @@ public class SearchService {
                 }
                 break;
         }
+
         return items.stream()
                 .map(inventoryUtils::createItemNodeResponse)
                 .collect(Collectors.toList());

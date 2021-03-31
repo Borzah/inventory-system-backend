@@ -5,7 +5,6 @@ import com.demo.inventory.item.service.CategoryService;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,18 +20,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
-    public List<CategoryDto> getAllCategories() {
-        return categoryService.getAllCategories();
-    }
-
     @GetMapping("user/{userId}")
     public List<CategoryDto> getAllCategoriesByUserId(@PathVariable Long userId,
                                                       @RequestHeader("Authorization") String authToken) {
         return categoryService.getAllCategoriesByUserId(userId, authToken);
     }
 
-    //@PreAuthorize("authChecker.checkUserAttachingTheirInfoBoolean(categoryDto.userId, authToken)")
     @PostMapping
     public CategoryDto addCategory(@Valid @RequestBody CategoryDto categoryDto,
                                    @RequestHeader("Authorization") String authToken) {

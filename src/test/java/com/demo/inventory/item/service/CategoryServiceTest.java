@@ -1,10 +1,10 @@
-package com.demo.inventory.item;
+package com.demo.inventory.item.service;
 
+import com.demo.inventory.configuration.StartDataUserConfig;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
-import com.demo.inventory.item.service.CategoryService;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.security.AuthChecker;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +19,9 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CategoryServiceTest {
+
+    @MockBean
+    private StartDataUserConfig startDataUserConfig;
 
     @MockBean
     private CategoryRepository categoryRepository;
@@ -44,6 +47,7 @@ public class CategoryServiceTest {
     void shouldNotAddCategory() {
         when(categoryRepository.findAllByUserIdAndCategoryName(1L,"test"))
                 .thenReturn(List.of(category));
+
         assertThatThrownBy(() -> categoryService.addCategory(categoryDto, ""))
                 .isInstanceOf(ItemException.class)
                 .hasMessageContaining("Category with such name is already present");

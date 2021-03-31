@@ -2,11 +2,9 @@ package com.demo.inventory.configuration;
 
 import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.repository.ImageRepository;
-import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

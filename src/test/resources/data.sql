@@ -1,5 +1,11 @@
+DROP TABLE IF EXISTS App_user;
+DROP TABLE IF EXISTS Folder;
+DROP TABLE IF EXISTS Category;
+DROP TABLE IF EXISTS Item;
+DROP TABLE IF EXISTS Image;
+
 CREATE TABLE App_user (
-                          user_id BIGSERIAL PRIMARY KEY,
+                          user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           username VARCHAR(255) NOT NULL UNIQUE,
                           password VARCHAR(255) NOT NULL,
                           role VARCHAR(1) NOT NULL,
@@ -8,7 +14,7 @@ CREATE TABLE App_user (
 
 
 CREATE TABLE Folder (
-                        folder_id BIGSERIAL PRIMARY KEY,
+                        folder_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                         folder_name VARCHAR(40) NOT NULL,
                         parent_id BIGINT,
                         user_id BIGINT NOT NULL,
@@ -20,7 +26,7 @@ CREATE TABLE Folder (
 
 
 CREATE TABLE Category (
-                          category_id BIGSERIAL PRIMARY KEY,
+                          category_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           user_id BIGINT NOT NULL,
                           category_name VARCHAR(40) NOT NULL,
                           FOREIGN KEY (user_id)
@@ -29,7 +35,7 @@ CREATE TABLE Category (
 
 
 CREATE TABLE Item (
-                      item_id BIGSERIAL PRIMARY KEY,
+                      item_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                       item_name VARCHAR(40) NOT NULL,
                       folder_id BIGINT,
                       user_id BIGINT NOT NULL,
@@ -48,7 +54,7 @@ CREATE TABLE Item (
 
 CREATE TABLE Image (
                        image_id BIGINT PRIMARY KEY,
-                       image_bytes BYTEA NOT NULL,
+                       image_bytes BLOB NOT NULL,
                        FOREIGN KEY (image_id)
                            REFERENCES Item (item_id) ON DELETE CASCADE
 );

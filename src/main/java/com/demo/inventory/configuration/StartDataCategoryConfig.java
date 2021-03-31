@@ -2,7 +2,6 @@ package com.demo.inventory.configuration;
 
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
-import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
