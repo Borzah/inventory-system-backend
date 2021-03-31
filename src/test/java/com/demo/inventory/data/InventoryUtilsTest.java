@@ -43,7 +43,7 @@ public class InventoryUtilsTest {
                 new Folder(6L, "test6", 3L, 1L)
         );
 
-        String expected = "My-Items/test1/test2/test4/";
+        String expected = "My-Items / test1 / test2 / test4 /";
         String actual = inventoryUtils.getFolderPathName(searchableSpace, testable);
         assertThat(actual).isEqualTo(expected);
     }

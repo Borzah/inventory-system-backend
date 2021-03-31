@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -24,7 +25,7 @@ public class ItemDto {
     @NotNull(message = "Item userId cannot be null!")
     private Long userId;
     private Long categoryId;
-    private Date dateAdded;
+    private Timestamp dateAdded;
     private String description;
     @Size(max = 50, message
             = "Item serial number cannot be over 50 characters")

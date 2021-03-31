@@ -3,6 +3,7 @@ package com.demo.inventory.item.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -27,7 +28,7 @@ public class Item {
     @Column(name = "category_id")
     private Long categoryId;
     @Column(name = "date_added")
-    private Date dateAdded;
+    private Timestamp dateAdded;
     @Column(name = "description")
     private String description;
     @Column(name = "serial_number")

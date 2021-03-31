@@ -10,6 +10,7 @@ import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -40,11 +41,11 @@ public class StatisticsService {
     private UserStatisticsResponse getStatisticsResponseByUser(User user) {
         String username = user.getUsername();
         Long userId = user.getUserId();
-        Date userRegisteredAt = user.getDateRegistered();
+        Timestamp userRegisteredAt = user.getDateRegistered();
         List<Item> userItems = itemRepository.findAllByUserId(userId);
         int userNumOfItems = userItems.size();
         int userNumOfFolders = folderRepository.findAllByUserId(userId).size();
-        Date userLastItemAddedAt = null;
+        Timestamp userLastItemAddedAt = null;
         if (userNumOfItems > 0) {
             userItems.sort(Comparator.comparing(Item::getDateAdded));
             userLastItemAddedAt = userItems.get(userItems.size() - 1).getDateAdded();

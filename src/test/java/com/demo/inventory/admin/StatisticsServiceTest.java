@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,12 +44,12 @@ public class StatisticsServiceTest {
 
     @Test
     void shouldGetStatistics() {
-        Date registeredAt = new Date();
+        Timestamp registeredAt = new Timestamp(System.currentTimeMillis());
         User admin = new User("test", "test", DbRole.ADMIN, registeredAt);
         admin.setUserId(0L);
         User user = new User("test", "test", DbRole.USER, registeredAt);
         user.setUserId(1L);
-        Date resultDate = new Date();
+        Timestamp resultDate = new Timestamp(System.currentTimeMillis());
         List<Item> items = new ArrayList<>();
         items.add(Item.builder().dateAdded(resultDate).build());
         List<Folder> folders = new ArrayList<>();

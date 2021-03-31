@@ -19,8 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -58,7 +60,7 @@ public class InventoryServiceTest {
 
     @Test
     void shouldGenerateValidFolderResponse() {
-        Date date = new Date();
+        Timestamp date = new Timestamp(System.currentTimeMillis());
         Folder folder1 = new Folder(1L, "test1", null, 1L);
         Folder folder2 = new Folder(2L, "test2", 1L, 1L);
         Folder folder3 = new Folder(3L, "test3", 1L, 1L);
@@ -66,6 +68,8 @@ public class InventoryServiceTest {
         FolderDto folderDto3 = FolderDto.builder().folderId(3L).folderName("test3").parentId(1L).userId(1L).build();
         Item item = Item.builder().itemId(1L).itemName("test").dateAdded(date).build();
         ItemNodeResponse itemNode = new ItemNodeResponse(1L, "test");
+
+        when(folderRepository.findById(1L)).thenReturn(Optional.of(folder1));
 
         when(folderRepository.findAllByUserIdAndParentId(1L, 1L)).thenReturn(
                 List.of(folder2, folder3)
@@ -87,19 +91,19 @@ public class InventoryServiceTest {
                 .thenReturn(List.of());
 
         when(inventoryUtils.getFolderPathName(List.of(), folder1))
-                .thenReturn("My-Items/test1/");
+                .thenReturn("My-Items / test1 /");
 
         FolderResponse expected = FolderResponse.builder()
                 .currentFolderId(1L)
                 .parentFolderId(null)
-                .currentFolderPathName("My-Items/test1/")
+                .currentFolderPathName("My-Items / test1 /")
                 .folders(List.of(folderDto2, folderDto3))
                 .items(List.of(itemNode)).build();
 
         when(inventoryUtils.createFolderResponse(
                 1L,
                 null,
-                "My-Items/test1/",
+                "My-Items / test1 /",
                 List.of(folderDto2, folderDto3),
                 List.of(itemNode))).thenReturn(expected);
 

@@ -1,6 +1,5 @@
 package com.demo.inventory.item;
 
-import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.model.Category;

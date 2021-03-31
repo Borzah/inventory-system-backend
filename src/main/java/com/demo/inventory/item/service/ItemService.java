@@ -10,6 +10,7 @@ import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +92,7 @@ public class ItemService {
                 .userId(itemDto.getUserId())
                 .categoryId(itemDto.getCategoryId())
                 .description(itemDto.getDescription())
-                .dateAdded(new Date())
+                .dateAdded(new Timestamp(System.currentTimeMillis()))
                 .serialNumber(itemDto.getSerialNumber())
                 .itemPrice(itemDto.getItemPrice()).build();
     }

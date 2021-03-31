@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class InventoryServiceCategoriesTest {
 
     @Test
     void ShouldReturnValidItemsByCategories() {
-        Date date = new Date();
+        Timestamp date = new Timestamp(System.currentTimeMillis());
         Category category1 = Category.builder().categoryId(1L).userId(1L).categoryName("test1").build();
         Category category2 = Category.builder().categoryId(2L).userId(1L).categoryName("test2").build();
         Item item1 = Item.builder().itemId(1L).itemName("testItem1").dateAdded(date).build();

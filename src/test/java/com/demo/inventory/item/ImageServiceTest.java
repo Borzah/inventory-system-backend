@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -41,7 +42,7 @@ public class ImageServiceTest {
 
     @Test
     void shouldNotAddImageBecauseItIsNotImageFileType() throws IOException {
-        when(itemRepository.findByItemId(1L)).thenReturn(Item.builder().itemId(1L).userId(1L).build());
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(new Item()));
         when(file.getBytes()).thenReturn(new byte[]{});
         when(file.getSize()).thenReturn(200000L);
         when(file.getContentType()).thenReturn("pdf");
@@ -52,9 +53,9 @@ public class ImageServiceTest {
 
     @Test
     void shouldNotAddImageBecauseItIsTooBig() throws IOException {
-        when(itemRepository.findByItemId(1L)).thenReturn(Item.builder().itemId(1L).userId(1L).build());
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(new Item()));
         when(file.getBytes()).thenReturn(new byte[]{});
-        when(file.getSize()).thenReturn(800000L);
+        when(file.getSize()).thenReturn(1200000L);
         when(file.getContentType()).thenReturn("image/png");
         assertThatThrownBy(() -> imageService.addImage(1L, file, ""))
                 .isInstanceOf(ItemException.class)

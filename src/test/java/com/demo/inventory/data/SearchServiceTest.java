@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class SearchServiceTest {
     @BeforeEach
     void setUp() {
         searchService = new SearchService(itemRepository, inventoryUtils, authChecker);
-        testItem = new Item(1L, "test", 1L, 1L, 1L, new Date(), "test description", "12345", 12.99f);
+        testItem = new Item(1L, "test", 1L, 1L, 1L, new Timestamp(System.currentTimeMillis()), "test description", "12345", 12.99f);
         testItemResponse = new ItemNodeResponse(1L, "test");
     }
 

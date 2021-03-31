@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Component
@@ -24,7 +25,7 @@ public class UserConfig {
                     userProperties.getUsername(),
                     passwordEncoder.encode(userProperties.getPassword()),
                     userProperties.getRole(),
-                    new Date()
+                    new Timestamp(System.currentTimeMillis())
                 );
             userRepository.save(admin);
         }

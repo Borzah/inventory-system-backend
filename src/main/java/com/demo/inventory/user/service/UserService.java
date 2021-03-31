@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Service
@@ -28,7 +29,7 @@ public class UserService {
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         user.setRole(DbRole.USER);
-        user.setDateRegistered(new Date());
+        user.setDateRegistered(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
     }
 
