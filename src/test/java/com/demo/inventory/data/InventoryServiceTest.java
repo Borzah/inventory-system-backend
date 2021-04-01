@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryServiceTest {
 
-    @MockBean
+    @MockBean // Added to avoid conflicts
     private StartDataUserConfig startDataUserConfig;
     @MockBean
     private ItemRepository itemRepository;

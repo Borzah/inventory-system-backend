@@ -21,12 +21,8 @@ public class ItemService {
 
     public ItemDto addItem(ItemDto itemDto, String authToken) {
         Long userId = itemDto.getUserId();
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        itemUtils.checkNamings(itemDto);
 
-        if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
-            itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
-        }
+        performAllItemChecks(itemDto, userId, authToken);
 
         Item item = createItemFromDto(itemDto);
         item.setDateAdded(new Timestamp(System.currentTimeMillis()));
@@ -52,12 +48,8 @@ public class ItemService {
         Item item = itemOptional.get(); // optional isPresent is checked in utils method
         Timestamp dateAdded = item.getDateAdded();
         Long userId = item.getUserId();
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        itemUtils.checkNamings(itemDto);
 
-        if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
-            itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
-        }
+        performAllItemChecks(itemDto, userId, authToken);
 
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
@@ -75,6 +67,19 @@ public class ItemService {
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
 
         itemRepository.deleteById(itemId);
+    }
+
+    private void performAllItemChecks(ItemDto itemDto, Long userId, String authToken) {
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
+        itemUtils.checkNamings(itemDto);
+
+        if (Optional.ofNullable(itemDto.getFolderId()).isPresent()) {
+            itemUtils.checkUserAddingItemOrFolderIntoTheirFolder(itemDto.getFolderId(), userId);
+        }
+
+        if (Optional.ofNullable(itemDto.getCategoryId()).isPresent()) {
+            itemUtils.checkUserIsAddingItemToTheirCategory(itemDto.getCategoryId(), userId);
+        }
     }
 
     private ItemDto convertItem(Item item) {

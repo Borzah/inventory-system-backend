@@ -10,6 +10,7 @@ import com.demo.inventory.user.dto.LoginResponse;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -55,17 +57,19 @@ public class AuthService {
         String token = authToken.substring(7);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
         Optional<User> userOptional = userRepository.findById(userId);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return LoginResponse.builder()
-                    .userId(user.getUserId())
-                    .username(user.getUsername())
-                    .token(token)
-                    .role(user.getRole())
-                    .build();
+        if (userOptional.isEmpty()) {
+            throw new UserException("User does not exist");
         }
-        throw new UserException("User does not exist");
+
+        User user = userOptional.get();
+        log.info("Somebody accessed user info by token");
+
+        return LoginResponse.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .token(token)
+                .role(user.getRole())
+                .build();
     }
 }
 

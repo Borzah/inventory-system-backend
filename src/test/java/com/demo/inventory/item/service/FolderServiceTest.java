@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 public class FolderServiceTest {
 
-    @MockBean
+    @MockBean // Added to avoid conflicts
     private StartDataUserConfig startDataUserConfig;
 
     @MockBean

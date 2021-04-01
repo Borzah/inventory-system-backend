@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class StatisticsServiceTest {
 
-    @MockBean
+    @MockBean // Added to avoid conflicts
     private StartDataUserConfig startDataUserConfig;
 
     @MockBean

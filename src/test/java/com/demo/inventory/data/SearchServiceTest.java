@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class SearchServiceTest {
 
-    @MockBean
+    @MockBean // Added to avoid conflicts
     private StartDataUserConfig startDataUserConfig;
 
     @MockBean
