@@ -29,6 +29,7 @@ public class ItemService {
         }
 
         Item item = createItemFromDto(itemDto);
+        item.setDateAdded(new Timestamp(System.currentTimeMillis()));
 
         return convertItem(itemRepository.save(item));
     }
@@ -49,6 +50,7 @@ public class ItemService {
 
         itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
         Item item = itemOptional.get(); // optional isPresent is checked in utils method
+        Timestamp dateAdded = item.getDateAdded();
         Long userId = item.getUserId();
         authChecker.checkUserAttachingTheirInfo(userId, authToken);
         itemUtils.checkNamings(itemDto);
@@ -59,6 +61,7 @@ public class ItemService {
 
         item = createItemFromDto(itemDto);
         item.setItemId(itemId);
+        item.setDateAdded(dateAdded);
 
         return convertItem(itemRepository.save(item));
     }
@@ -96,7 +99,6 @@ public class ItemService {
                 .userId(itemDto.getUserId())
                 .categoryId(itemDto.getCategoryId())
                 .description(itemDto.getDescription())
-                .dateAdded(new Timestamp(System.currentTimeMillis()))
                 .serialNumber(itemDto.getSerialNumber())
                 .itemPrice(itemDto.getItemPrice())
                 .build();
