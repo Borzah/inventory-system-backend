@@ -18,7 +18,6 @@ public class FolderDto {
     @Size(max = 40, message
             = "Folder name cannot be over 40 characters")
     private String folderName;
-    private String folderPathName;
     private Long parentId;
     @NotNull(message = "User id cannot be null")
     private Long userId;

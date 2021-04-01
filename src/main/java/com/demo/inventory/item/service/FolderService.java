@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +35,13 @@ public class FolderService {
         }
 
         return convertFolder(folderRepository.save(createFolderFromFolderDto(folderDto)));
+    }
+
+    public List<FolderDto> getAllUserFolders(Long userId, String authToken) {
+        authChecker.checkUserAttachingTheirInfo(userId, authToken);
+        return folderRepository.findAllByUserId(userId).stream()
+                .map(this::convertFolder)
+                .collect(Collectors.toList());
     }
 
     public void deleteFolder(Long folderId, String authToken) {
@@ -66,4 +74,5 @@ public class FolderService {
                 .parentId(folderDto.getParentId())
                 .build();
     }
+
 }
