@@ -3,6 +3,7 @@ package com.demo.inventory.item.service;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.ImageDto;
+import com.demo.inventory.item.mapper.ImageMapper;
 import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ImageRepository;
@@ -21,6 +22,7 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
     private final ItemRepository itemRepository;
+    private final ImageMapper mapper;
 
     public ImageDto addImage(Long imageId, MultipartFile file, Long userId) throws IOException {
         Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(imageId, userId);
@@ -34,7 +36,7 @@ public class ImageService {
 
         Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();
 
-        return convertImage(imageRepository.save(image));
+        return mapper.fromImage(imageRepository.save(image));
     }
 
     private void validateImage(MultipartFile file) {
@@ -45,12 +47,5 @@ public class ImageService {
         if (file.getSize() > 1000000L) {
             throw new ItemException("A file cannot be over 1 Mb");
         }
-    }
-
-    private ImageDto convertImage(Image image) {
-        return ImageDto.builder()
-                .imageId(image.getImageId())
-                .imageBytes(image.getImageBytes())
-                .build();
     }
 }

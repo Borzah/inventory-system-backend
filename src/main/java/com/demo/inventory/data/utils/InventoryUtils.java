@@ -3,7 +3,9 @@ package com.demo.inventory.data.utils;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
+import com.demo.inventory.data.mapper.ItemResponseMapper;
 import com.demo.inventory.item.dto.FolderDto;
+import com.demo.inventory.item.mapper.CategoryMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Image;
@@ -26,6 +28,7 @@ public class InventoryUtils {
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
     private final FolderRepository folderRepository;
+    private final ItemResponseMapper mapper;
 
     public ItemNodeResponse createItemNodeResponse(Item item) {
         return new ItemNodeResponse(item.getItemId(), item.getItemName());
@@ -51,18 +54,7 @@ public class InventoryUtils {
             folderName = folder.getFolderName();
         }
 
-        return ItemResponse.builder()
-                .itemId(item.getItemId())
-                .itemName(item.getItemName())
-                .folderId(item.getFolderId())
-                .folderName(folderName)
-                .userId(item.getUserId())
-                .dateAdded(item.getDateAdded())
-                .description(item.getDescription())
-                .serialNumber(item.getSerialNumber())
-                .categoryName(categoryName)
-                .imageBytes(imageBytes)
-                .itemPrice(item.getItemPrice()).build();
+        return mapper.itemToItemResponse(item, folderName, categoryName, imageBytes);
     }
 
     public String getFolderPathName(List<Folder> searchableSpace, Folder currentFolder) {

@@ -6,6 +6,8 @@ import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.FolderDto;
+import com.demo.inventory.item.mapper.CategoryMapper;
+import com.demo.inventory.item.mapper.FolderMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
@@ -29,25 +31,22 @@ public class InventoryService {
     private final ItemRepository itemRepository;
     private final FolderRepository folderRepository;
     private final CategoryRepository categoryRepository;
-    private final FolderService folderService;
     private final InventoryUtils inventoryUtils;
+    private final FolderMapper folderMapper;
 
     private static final String ROOTNAME = "My-items";
 
     public ItemResponse getItemResponseByItemId(Long itemId, Long userId) {
-        Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(itemId, userId);
-
-        if (itemOptional.isEmpty()) {
-            throw new RequestedObjectNotFoundException(
-                    String.format("Item with id [%d] does not exist", itemId));
-        }
-        Item item = itemOptional.get();
-        return inventoryUtils.createItemResponse(item);
+        return itemRepository.findByItemIdAndUserId(itemId, userId)
+                .map(inventoryUtils::createItemResponse)
+                .orElseThrow(() -> new RequestedObjectNotFoundException(
+                        String.format("Item with id [%d] and user id [%d] does not exist",
+                                itemId, userId)));
     }
 
     public FolderResponse getContentBySection(Long userId, Long folderId) {
         List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(userId, folderId).stream()
-                .map(folderService::convertFolder)
+                .map(folderMapper::fromFolder)
                 .collect(Collectors.toList());
 
         List<ItemNodeResponse> items = itemRepository.findAllByUserIdAndFolderId(userId, folderId).stream()

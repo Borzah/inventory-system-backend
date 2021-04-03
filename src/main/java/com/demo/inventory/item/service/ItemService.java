@@ -1,5 +1,7 @@
 package com.demo.inventory.item.service;
 
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
+import com.demo.inventory.item.mapper.ItemMapper;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.ItemDto;
 import com.demo.inventory.item.model.Item;
@@ -16,26 +18,27 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemUtils itemUtils;
+    private final ItemMapper mapper;
 
     public ItemDto addItem(ItemDto itemDto, Long userId) {
 
         performAllItemChecks(itemDto, userId);
 
-        Item item = createItemFromDto(itemDto);
+        Item item = mapper.toItem(itemDto);
         item.setUserId(userId);
         item.setDateAdded(new Timestamp(System.currentTimeMillis()));
 
-        return convertItem(itemRepository.save(item));
+        return mapper.fromItem(itemRepository.save(item));
     }
 
     public ItemDto getItem(Long itemId, Long userId) {
-        Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(itemId, userId);
-        itemUtils.checkIfItemIsEmpty(itemOptional, itemId);
-
-        // optional isPresent is checked in utils method
-        Item item = itemOptional.get();
-
-        return convertItem(item);
+        return itemRepository.findByItemIdAndUserId(itemId, userId)
+                .map(mapper::fromItem)
+                .orElseThrow(() -> new RequestedObjectNotFoundException(
+                        String.format(
+                                "Item with id [%d] and user id [%d]  does not exist",
+                                itemId, userId)
+                ));
     }
 
     public ItemDto updateItem(Long itemId, ItemDto itemDto, Long userId) {
@@ -49,12 +52,12 @@ public class ItemService {
 
         performAllItemChecks(itemDto, userId);
 
-        item = createItemFromDto(itemDto);
+        item = mapper.toItem(itemDto);
         item.setItemId(itemId);
         item.setUserId(userId);
         item.setDateAdded(dateAdded);
 
-        return convertItem(itemRepository.save(item));
+        return mapper.fromItem(itemRepository.save(item));
     }
 
     public void deleteItem(Long itemId, Long userId) {
@@ -75,32 +78,5 @@ public class ItemService {
         if (Optional.ofNullable(itemDto.getCategoryId()).isPresent()) {
             itemUtils.checkUserIsAddingItemToTheirCategory(itemDto.getCategoryId(), userId);
         }
-    }
-
-    private ItemDto convertItem(Item item) {
-        return ItemDto.builder()
-                .itemId(item.getItemId())
-                .itemName(item.getItemName())
-                .folderId(item.getFolderId())
-                .userId(item.getUserId())
-                .categoryId(item.getCategoryId())
-                .dateAdded(item.getDateAdded())
-                .description(item.getDescription())
-                .serialNumber(item.getSerialNumber())
-                .itemPrice(item.getItemPrice())
-                .build();
-    }
-
-    private Item createItemFromDto(ItemDto itemDto) {
-        return Item
-                .builder()
-                .itemName(itemDto.getItemName())
-                .folderId(itemDto.getFolderId())
-                .userId(itemDto.getUserId())
-                .categoryId(itemDto.getCategoryId())
-                .description(itemDto.getDescription())
-                .serialNumber(itemDto.getSerialNumber())
-                .itemPrice(itemDto.getItemPrice())
-                .build();
     }
 }

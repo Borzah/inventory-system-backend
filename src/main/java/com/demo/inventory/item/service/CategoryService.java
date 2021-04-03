@@ -2,6 +2,8 @@ package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.dto.CategoryDto;
+import com.demo.inventory.item.mapper.CategoryMapper;
+import com.demo.inventory.item.mapper.ItemMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.utils.ItemUtils;
@@ -17,10 +19,11 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final ItemUtils itemUtils;
+    private final CategoryMapper mapper;
 
     public List<CategoryDto> getAllCategoriesByUserId(Long userId) {
         return categoryRepository.findAllByUserId(userId).stream()
-                .map(this::convertCategory)
+                .map(mapper::fromCategory)
                 .collect(Collectors.toList());
     }
 
@@ -33,13 +36,6 @@ public class CategoryService {
 
         Category category = new Category(userId, categoryDto.getCategoryName());
 
-        return convertCategory(categoryRepository.save(category));
-    }
-
-    private CategoryDto convertCategory(Category category) {
-        return CategoryDto.builder()
-                .categoryId(category.getCategoryId())
-                .userId(category.getUserId())
-                .categoryName(category.getCategoryName()).build();
+        return mapper.fromCategory(categoryRepository.save(category));
     }
 }
