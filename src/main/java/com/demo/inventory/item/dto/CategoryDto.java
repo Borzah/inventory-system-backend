@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 public class CategoryDto {
 
     private Long categoryId;
-    @NotNull(message = "User id cannot be null")
     private Long userId;
     @Size(max = 40, message
             = "Category name cannot be over 40 characters")

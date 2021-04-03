@@ -7,7 +7,6 @@ import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ImageRepository;
 import com.demo.inventory.item.repository.ItemRepository;
-import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,18 +21,15 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
     private final ItemRepository itemRepository;
-    private final AuthChecker authChecker;
 
-    public ImageDto addImage(Long imageId, MultipartFile file, String authToken) throws IOException {
-        Optional<Item> itemOptional = itemRepository.findById(imageId);
+    public ImageDto addImage(Long imageId, MultipartFile file, Long userId) throws IOException {
+        Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(imageId, userId);
 
         if (itemOptional.isEmpty()) {
             throw new RequestedObjectNotFoundException(
-                    String.format("Item with id [%d] does not exist", imageId));
+                    String.format("Item with id [%d] and user id [%d] does not exist", imageId, userId));
         }
 
-        Long userId = itemOptional.get().getUserId();
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
         validateImage(file);
 
         Image image = Image.builder().imageId(imageId).imageBytes(file.getBytes()).build();

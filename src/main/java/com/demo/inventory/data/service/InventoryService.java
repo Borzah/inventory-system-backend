@@ -13,7 +13,6 @@ import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ItemRepository;
 import com.demo.inventory.item.service.FolderService;
-import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,63 +31,59 @@ public class InventoryService {
     private final CategoryRepository categoryRepository;
     private final FolderService folderService;
     private final InventoryUtils inventoryUtils;
-    private final AuthChecker authChecker;
 
-    public ItemResponse getItemResponseByItemId(Long itemId, String authToken) {
-        Optional<Item> itemOptional = itemRepository.findById(itemId);
+    private static final String ROOTNAME = "My-items";
 
-        if (itemOptional.isPresent()) {
-            Item item = itemOptional.get();
-            authChecker.checkUserAttachingTheirInfo(item.getUserId(), authToken);
-            return inventoryUtils.createItemResponse(item);
+    public ItemResponse getItemResponseByItemId(Long itemId, Long userId) {
+        Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(itemId, userId);
+
+        if (itemOptional.isEmpty()) {
+            throw new RequestedObjectNotFoundException(
+                    String.format("Item with id [%d] does not exist", itemId));
         }
-        throw new RequestedObjectNotFoundException(
-                String.format("Item with id [%d] does not exist", itemId));
+        Item item = itemOptional.get();
+        return inventoryUtils.createItemResponse(item);
     }
 
-    public FolderResponse getContentBySection(Long user, Long folder, String authToken) {
-        authChecker.checkUserAttachingTheirInfo(user, authToken);
-
-        List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(user, folder).stream()
+    public FolderResponse getContentBySection(Long userId, Long folderId) {
+        List<FolderDto> folders = folderRepository.findAllByUserIdAndParentId(userId, folderId).stream()
                 .map(folderService::convertFolder)
                 .collect(Collectors.toList());
 
-        List<ItemNodeResponse> items = itemRepository.findAllByUserIdAndFolderId(user, folder).stream()
+        List<ItemNodeResponse> items = itemRepository.findAllByUserIdAndFolderId(userId, folderId).stream()
                 .map(inventoryUtils::createItemNodeResponse)
                 .collect(Collectors.toList());
 
         Long parentFolderId = null;
-        String currentFolderPathName = "My-items";
+        String currentFolderPathName = ROOTNAME;
 
-        if (Optional.ofNullable(folder).isPresent()) {
-            Optional<Folder> currentFolderOptional = folderRepository.findById(folder);
+        if (Optional.ofNullable(folderId).isPresent()) {
+            Optional<Folder> currentFolderOptional = folderRepository.findById(folderId);
             if (currentFolderOptional.isEmpty()) {
                 throw new RequestedObjectNotFoundException(
-                        String.format("Folder with id [%d] does not exist", folder));
+                        String.format("Folder with id [%d] does not exist", folderId));
             }
 
             Folder currentFolder = currentFolderOptional.get();
             parentFolderId = currentFolder.getParentId();
             List<Folder> possibleParents = folderRepository
-                    .findAllByUserIdAndFolderIdIsLessThan(user, folder);
+                    .findAllByUserIdAndFolderIdIsLessThan(userId, folderId);
             currentFolderPathName = inventoryUtils.getFolderPathName(possibleParents, currentFolder);
         }
 
         return inventoryUtils.createFolderResponse(
-                folder,
+                folderId,
                 parentFolderId,
                 currentFolderPathName,
                 folders,
                 items);
     }
 
-    public Map<String, List<ItemNodeResponse>> getItemsByCategory(Long userId,
-                                                                  String authToken) {
+    public Map<String, List<ItemNodeResponse>> getItemsByCategory(Long userId) {
         Map<String, List<ItemNodeResponse>> result = new HashMap<>();
         List<Category> categories = categoryRepository.findAllByUserId(userId);
 
         categories.forEach(category -> {
-            authChecker.checkUserAttachingTheirInfo(category.getUserId(), authToken);
             List<ItemNodeResponse> items = itemRepository.findAllByCategoryId(category.getCategoryId()).stream()
                     .map(inventoryUtils::createItemNodeResponse)
                     .collect(Collectors.toList());

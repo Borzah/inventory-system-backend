@@ -24,6 +24,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.liquibase:liquibase-core'
 
+	implementation 'io.swagger.core.v3:swagger-core'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
+
 	compile 'io.jsonwebtoken:jjwt:0.9.1'
 	compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.6.Final'
 

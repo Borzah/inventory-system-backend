@@ -22,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void registerUser(RegisterDto registerDto) {
-        if (userRepository.findAllByUsername(registerDto.getUsername()).size() > 0) {
+        if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {
             throw new UserException("User with this username already exists!");
         }
         User user = new User();

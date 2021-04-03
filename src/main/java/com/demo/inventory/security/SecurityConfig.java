@@ -22,29 +22,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtRequestFilter jwtRequestFilter;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    private final MyUserDetailsService myUserDetailsService;
+    // rename, get rid of "my"
+    private final InventoryUserDetailsService inventoryUserDetailsService;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint, MyUserDetailsService myUserDetailsService) {
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint, InventoryUserDetailsService inventoryUserDetailsService) {
         this.jwtRequestFilter = jwtRequestFilter;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
-        this.myUserDetailsService = myUserDetailsService;
+        this.inventoryUserDetailsService = inventoryUserDetailsService;
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService);
+        auth.userDetailsService(inventoryUserDetailsService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // TODO what is csrf
+        // TODO what is cors
         http
                 .csrf().disable()
-                .cors().and()
-                .headers().httpStrictTransportSecurity().disable()
-                .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS)
+                .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
@@ -53,9 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/register").permitAll()
                 .antMatchers("/user/logout/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers("/user/data/").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                .antMatchers("/api/swagger-ui/**").permitAll()
-                .anyRequest().authenticated()
-        ;
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean

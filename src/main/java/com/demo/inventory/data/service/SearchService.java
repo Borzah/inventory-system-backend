@@ -4,7 +4,6 @@ import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ItemRepository;
-import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,8 @@ public class SearchService {
 
     private final ItemRepository itemRepository;
     private final InventoryUtils inventoryUtils;
-    private final AuthChecker authChecker;
 
-    public List<ItemNodeResponse> getAllUsersItemNodes(Long userId, String attribute, String search, String authToken) {
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
-
+    public List<ItemNodeResponse> getAllUsersItemNodes(Long userId, String attribute, String search) {
         if (Optional.ofNullable(attribute).isEmpty()) attribute = "";
         List<Item> items = new ArrayList<>();
 

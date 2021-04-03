@@ -5,7 +5,6 @@ import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.utils.ItemUtils;
-import com.demo.inventory.security.AuthChecker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,22 +16,18 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final AuthChecker authChecker;
     private final ItemUtils itemUtils;
 
-    public List<CategoryDto> getAllCategoriesByUserId(Long userId, String authToken) {
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
+    public List<CategoryDto> getAllCategoriesByUserId(Long userId) {
         return categoryRepository.findAllByUserId(userId).stream()
                 .map(this::convertCategory)
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto addCategory(CategoryDto categoryDto, String authToken) {
-        Long userId = categoryDto.getUserId();
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
-        itemUtils.checkNamingRegex(List.of(categoryDto.getCategoryName()));
+    public CategoryDto addCategory(CategoryDto categoryDto, Long userId) {
+        itemUtils.checkNamingRegex(categoryDto.getCategoryName());
 
-        if (!categoryRepository.findAllByUserIdAndCategoryName(userId, categoryDto.getCategoryName()).isEmpty()) {
+        if (categoryRepository.findByUserIdAndCategoryName(userId, categoryDto.getCategoryName()).isPresent()) {
             throw new ItemException("Category with such name is already present");
         }
 

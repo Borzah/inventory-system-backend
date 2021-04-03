@@ -2,17 +2,18 @@ package com.demo.inventory.item.controller;
 
 import com.demo.inventory.item.dto.ItemDto;
 import com.demo.inventory.item.service.ItemService;
+import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Secured(Roles.USER)
 @RestController
-@RequestMapping("items")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("item")
 @AllArgsConstructor
 public class ItemController {
 
@@ -20,26 +21,26 @@ public class ItemController {
 
     @GetMapping("{itemId}")
     public ItemDto getItem(@PathVariable Long itemId,
-                           @RequestHeader("Authorization") String authToken) {
-        return itemService.getItem(itemId, authToken);
+                           @AuthenticationPrincipal InventoryUser auth) {
+        return itemService.getItem(itemId, auth.getId());
     }
 
     @PostMapping
     public ItemDto addItem(@Valid @RequestBody ItemDto itemDto,
-                           @RequestHeader("Authorization") String authToken) {
-        return itemService.addItem(itemDto, authToken);
+                           @AuthenticationPrincipal InventoryUser auth) {
+        return itemService.addItem(itemDto, auth.getId());
     }
 
     @PutMapping("{itemId}")
     public ItemDto updateItem(@PathVariable Long itemId,
                               @Valid @RequestBody ItemDto itemDto,
-                              @RequestHeader("Authorization") String authToken) {
-        return itemService.updateItem(itemId, itemDto, authToken);
+                              @AuthenticationPrincipal InventoryUser auth) {
+        return itemService.updateItem(itemId, itemDto, auth.getId());
     }
 
     @DeleteMapping("{itemId}")
     public void deleteItem(@PathVariable Long itemId,
-                           @RequestHeader("Authorization") String authToken) {
-        itemService.deleteItem(itemId, authToken);
+                           @AuthenticationPrincipal InventoryUser auth) {
+        itemService.deleteItem(itemId, auth.getId());
     }
 }

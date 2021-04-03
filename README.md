@@ -27,3 +27,19 @@ docker-compose down
 
 docker-compose up
 ```
+
+## Swagger documentation
+
+http://localhost:8080/swagger-ui
+
+
+### Test users:
+
+| Username         |   Password | Role   |
+|------------------|------------|--------|
+|  admin@mail.com  | password   | Admin  |
+|  john@mail.com  | password   | User    |
+|  anna@mail.com  | password   | User    |
+|  mike@mail.com  | password   | User    |
+|  jane@mail.com  | password   | User    |
+

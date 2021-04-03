@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
@@ -16,6 +17,8 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
     List<Folder> findAllByUserId(Long userId);
 
     Folder findByFolderId(Long folderId);
+
+    Optional<Folder> findByFolderIdAndUserId(Long folderId, Long userId);
 
     List<Folder> findAllByUserIdAndFolderIdIsLessThan(Long userId, Long folderId);
 }

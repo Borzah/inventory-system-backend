@@ -1,9 +1,8 @@
 package com.demo.inventory.user.service;
 
 import com.demo.inventory.exception.UserException;
-import com.demo.inventory.security.AuthChecker;
 import com.demo.inventory.security.JwtTokenProvider;
-import com.demo.inventory.security.MyUser;
+import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.UserTokenHolder;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
@@ -28,7 +27,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserTokenHolder userTokenHolder;
-    private final AuthChecker authChecker;
     private final UserRepository userRepository;
 
     public LoginResponse login(LoginDto loginDto) {
@@ -36,26 +34,21 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
             );
 
-        MyUser myUser = (MyUser) authenticate.getPrincipal();
-        String token = jwtTokenProvider.generateToken(myUser);
-        userTokenHolder.addToken(myUser.getId(), token);
+        InventoryUser inventoryUser = (InventoryUser) authenticate.getPrincipal();
+        String token = jwtTokenProvider.generateToken(inventoryUser);
+        userTokenHolder.addToken(inventoryUser.getId(), token);
 
         return LoginResponse.builder()
-                .userId(myUser.getId())
-                .username(myUser.getUsername())
                 .token(token)
-                .role(myUser.getDbRole())
+                .role(inventoryUser.getDbRole())
                 .build();
     }
 
-    public void logout(Long userId, String authToken) {
-        authChecker.checkUserAttachingTheirInfo(userId, authToken);
+    public void logout(Long userId) {
         userTokenHolder.removeToken(userId);
     }
 
-    public LoginResponse getUserDataByToken(String authToken) {
-        String token = authToken.substring(7);
-        Long userId = jwtTokenProvider.getUserIdFromToken(token);
+    public LoginResponse getUserDataByToken(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             throw new UserException("User does not exist");
@@ -65,9 +58,6 @@ public class AuthService {
         log.info("Somebody accessed user info by token");
 
         return LoginResponse.builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .token(token)
                 .role(user.getRole())
                 .build();
     }

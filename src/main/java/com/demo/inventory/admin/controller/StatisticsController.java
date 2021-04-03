@@ -15,7 +15,6 @@ import java.util.List;
 @Secured(Roles.ADMIN)
 @RestController
 @RequestMapping("statistics")
-@CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
 public class StatisticsController {
 

@@ -16,6 +16,8 @@ public class JwtTokenProvider {
 
     private final JwtConfig jwtConfig;
 
+    private static final String USER_ID_KEY = "userId";
+
     public JwtTokenProvider(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
     }
@@ -30,10 +32,10 @@ public class JwtTokenProvider {
 
     public Long getUserIdFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
-        return claims.get("userId", Long.class);
+        return claims.get(USER_ID_KEY, Long.class);
     }
 
-    public String generateToken(MyUser userDetails) {
+    public String generateToken(InventoryUser userDetails) {
         return doGenerateToken(new HashMap<>(), userDetails.getUsername(), userDetails.getId());
     }
 
@@ -60,7 +62,8 @@ public class JwtTokenProvider {
 
     private String doGenerateToken(Map<String, Object> claims, String subject, Long userId) {
         long currentTimeMs = System.currentTimeMillis();
-        claims.put("userId", userId);
+
+        claims.put(USER_ID_KEY, userId);
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(currentTimeMs))
                 .setExpiration(new Date(currentTimeMs + jwtConfig.getDurationMillis()))

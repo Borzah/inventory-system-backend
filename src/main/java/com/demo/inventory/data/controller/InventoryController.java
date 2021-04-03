@@ -5,9 +5,11 @@ import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.service.InventoryService;
 import com.demo.inventory.data.service.SearchService;
+import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +18,6 @@ import java.util.Map;
 @Secured(Roles.USER)
 @RestController
 @RequestMapping("inventory")
-@CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
 public class InventoryController {
 
@@ -24,29 +25,26 @@ public class InventoryController {
     private final SearchService searchService;
 
     @GetMapping
-    public FolderResponse getContentBySection(@RequestParam Long user,
-                                              @RequestParam(required = false) Long folder,
-                                              @RequestHeader("Authorization") String authToken) {
-        return inventoryService.getContentBySection(user, folder, authToken);
+    public FolderResponse getContentBySection(@RequestParam(required = false) Long folderId,
+                                              @AuthenticationPrincipal InventoryUser auth) {
+        return inventoryService.getContentBySection(auth.getId(), folderId);
     }
 
     @GetMapping("{itemId}")
     public ItemResponse getItemResponseByItemId(@PathVariable Long itemId,
-                                                @RequestHeader("Authorization") String authToken) {
-        return inventoryService.getItemResponseByItemId(itemId, authToken);
+                                                @AuthenticationPrincipal InventoryUser auth) {
+        return inventoryService.getItemResponseByItemId(itemId, auth.getId());
     }
 
-    @GetMapping("user/{userId}/categories")
-    public Map<String, List<ItemNodeResponse>> getItemsByCategory(@PathVariable Long userId,
-                                                                  @RequestHeader("Authorization") String authToken) {
-        return inventoryService.getItemsByCategory(userId, authToken);
+    @GetMapping("user/categories")
+    public Map<String, List<ItemNodeResponse>> getItemsByCategory(@AuthenticationPrincipal InventoryUser auth) {
+        return inventoryService.getItemsByCategory(auth.getId());
     }
 
-    @GetMapping("user/{userId}")
-    public List<ItemNodeResponse> getAllUsersItemNodes(@PathVariable Long userId,
-                                                       @RequestParam(required = false) String attribute,
+    @GetMapping("user")
+    public List<ItemNodeResponse> getAllUsersItemNodes(@RequestParam(required = false) String attribute,
                                                        @RequestParam(required = false) String search,
-                                                       @RequestHeader("Authorization") String authToken) {
-        return searchService.getAllUsersItemNodes(userId, attribute, search, authToken);
+                                                       @AuthenticationPrincipal InventoryUser auth) {
+        return searchService.getAllUsersItemNodes(auth.getId(), attribute, search);
     }
 }

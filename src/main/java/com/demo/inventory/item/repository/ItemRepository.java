@@ -7,11 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Item findByItemId(Long itemId);
+
+    Optional<Item> findByItemIdAndUserId(Long itemId, Long userId);
 
     List<Item> findAllByUserIdAndFolderId(Long userId, Long folderId);
 

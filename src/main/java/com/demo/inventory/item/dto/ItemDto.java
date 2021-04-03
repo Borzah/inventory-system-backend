@@ -21,7 +21,6 @@ public class ItemDto {
             = "Item name cannot be over 40 characters")
     private String itemName;
     private Long folderId;
-    @NotNull(message = "Item userId cannot be null!")
     private Long userId;
     private Long categoryId;
     private Timestamp dateAdded;

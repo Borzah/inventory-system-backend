@@ -25,7 +25,7 @@ public class StartDataUserConfig {
 
     @PostConstruct
     private void addStartUserDataIfNeeded() throws IOException {
-        if (userRepository.findAllByUsername(userProperties.getAdminUsername()).size() == 0) {
+        if (userRepository.findByUsername(userProperties.getAdminUsername()).isEmpty()) {
 
             User admin = new User(
                     userProperties.getAdminUsername(),

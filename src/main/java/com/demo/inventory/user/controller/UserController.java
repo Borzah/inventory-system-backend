@@ -1,5 +1,6 @@
 package com.demo.inventory.user.controller;
 
+import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.user.dto.LoginDto;
 import com.demo.inventory.user.dto.LoginResponse;
 import com.demo.inventory.user.dto.RegisterDto;
@@ -8,12 +9,12 @@ import com.demo.inventory.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("user")
 @AllArgsConstructor
 public class UserController {
@@ -32,15 +33,14 @@ public class UserController {
         return authService.login(loginDto);
     }
 
-    @PostMapping("logout/{userId}")
-    public ResponseEntity<Void> logout(@PathVariable Long userId,
-                                       @RequestHeader("Authorization") String authToken) {
-        authService.logout(userId, authToken);
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal InventoryUser auth) {
+        authService.logout(auth.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("data")
-    public LoginResponse getUserDataByToken(@RequestHeader("Authorization") String authToken) {
-        return authService.getUserDataByToken(authToken);
+    public LoginResponse getUserDataByToken(@AuthenticationPrincipal InventoryUser auth) {
+        return authService.getUserDataByToken(auth.getId());
     }
 }
