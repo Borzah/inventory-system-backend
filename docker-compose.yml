@@ -1,10 +1,10 @@
 version: '3.1'
 
 services:
-  db:
+  dbpostgres:
     image: postgres
     ports:
-      - "8001:5432"
+      - "8002:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
