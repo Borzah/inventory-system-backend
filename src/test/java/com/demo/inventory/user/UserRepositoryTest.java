@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,12 +33,12 @@ public class UserRepositoryTest {
         user.setDateRegistered(new Timestamp(System.currentTimeMillis()));
 
         userRepository.save(user);
-        List<User> result = userRepository.findAllByUsername("test");
+        Optional<User> result = userRepository.findByUsername("test");
 
-        assertThat(result).isNotEmpty();
-        assertThat(result.get(0).getUsername()).isEqualTo("test");
+        assertThat(result).isPresent();
+        assertThat(result.get().getUsername()).isEqualTo("test");
 
-        List<User> resultEmpty = userRepository.findAllByUsername("test2");
+        Optional<User> resultEmpty = userRepository.findByUsername("test2");
         assertThat(resultEmpty).isEmpty();
     }
 }

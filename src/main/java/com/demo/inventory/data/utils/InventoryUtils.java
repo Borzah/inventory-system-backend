@@ -4,6 +4,7 @@ import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.mapper.ItemResponseMapper;
+import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.mapper.CategoryMapper;
 import com.demo.inventory.item.model.Category;
@@ -30,6 +31,9 @@ public class InventoryUtils {
     private final FolderRepository folderRepository;
     private final ItemResponseMapper mapper;
 
+    // Name of the first section in inventory
+    public static final String ROOT_NAME = "My-Items";
+
     public ItemNodeResponse createItemNodeResponse(Item item) {
         return new ItemNodeResponse(item.getItemId(), item.getItemName());
     }
@@ -45,12 +49,22 @@ public class InventoryUtils {
         }
 
         if (Optional.ofNullable(item.getCategoryId()).isPresent()) {
-            Category category = categoryRepository.findByCategoryId(item.getCategoryId());
+            Category category = categoryRepository.findById(item.getCategoryId())
+                    .orElseThrow(() -> new RequestedObjectNotFoundException(
+                            String.format(
+                                    "Category with id [%d] does not exist",
+                                    item.getCategoryId())
+                    ));
             categoryName = category.getCategoryName();
         }
 
         if (Optional.ofNullable(item.getFolderId()).isPresent()) {
-            Folder folder = folderRepository.findByFolderId(item.getFolderId());
+            Folder folder = folderRepository.findById(item.getFolderId())
+                    .orElseThrow(() -> new RequestedObjectNotFoundException(
+                            String.format(
+                                    "Folder with id [%d] does not exist",
+                                    item.getFolderId())
+                    ));
             folderName = folder.getFolderName();
         }
 
@@ -77,7 +91,8 @@ public class InventoryUtils {
 
         Collections.reverse(resultString);
         StringBuilder sb = new StringBuilder();
-        sb.append("My-Items /");
+        sb.append(ROOT_NAME);
+        sb.append(" /");
         for (String s : resultString) {
             sb.append(" ");
             sb.append(s);
@@ -85,18 +100,5 @@ public class InventoryUtils {
         }
 
         return sb.toString();
-    }
-
-    public FolderResponse createFolderResponse(Long currentFolderId,
-                                               Long parentFolderId,
-                                               String currentFolderPathName,
-                                               List<FolderDto> folders,
-                                               List<ItemNodeResponse> items) {
-        return FolderResponse.builder()
-                .currentFolderId(currentFolderId)
-                .parentFolderId(parentFolderId)
-                .currentFolderPathName(currentFolderPathName)
-                .folders(folders)
-                .items(items).build();
     }
 }

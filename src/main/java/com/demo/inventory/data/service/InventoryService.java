@@ -3,6 +3,7 @@ package com.demo.inventory.data.service;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
+import com.demo.inventory.data.mapper.FolderResponseMapper;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.FolderDto;
@@ -33,8 +34,7 @@ public class InventoryService {
     private final CategoryRepository categoryRepository;
     private final InventoryUtils inventoryUtils;
     private final FolderMapper folderMapper;
-
-    private static final String ROOTNAME = "My-items";
+    private final FolderResponseMapper folderResponseMapper;
 
     public ItemResponse getItemResponseByItemId(Long itemId, Long userId) {
         return itemRepository.findByItemIdAndUserId(itemId, userId)
@@ -54,10 +54,10 @@ public class InventoryService {
                 .collect(Collectors.toList());
 
         Long parentFolderId = null;
-        String currentFolderPathName = ROOTNAME;
+        String currentFolderPathName = InventoryUtils.ROOT_NAME;
 
         if (Optional.ofNullable(folderId).isPresent()) {
-            Optional<Folder> currentFolderOptional = folderRepository.findById(folderId);
+            Optional<Folder> currentFolderOptional = folderRepository.findByFolderIdAndUserId(folderId, userId);
             if (currentFolderOptional.isEmpty()) {
                 throw new RequestedObjectNotFoundException(
                         String.format("Folder with id [%d] does not exist", folderId));
@@ -70,7 +70,7 @@ public class InventoryService {
             currentFolderPathName = inventoryUtils.getFolderPathName(possibleParents, currentFolder);
         }
 
-        return inventoryUtils.createFolderResponse(
+        return folderResponseMapper.createFolderResponse(
                 folderId,
                 parentFolderId,
                 currentFolderPathName,

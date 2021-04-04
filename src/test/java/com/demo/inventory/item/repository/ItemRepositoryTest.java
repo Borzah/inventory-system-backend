@@ -54,13 +54,11 @@ public class ItemRepositoryTest {
                 .dateAdded(dateAdded).build();
 
         itemRepository.save(item);
-        Optional<Item> itemOptional = itemRepository.findById(1L);
+        Optional<Item> itemOptional = itemRepository.findByItemIdAndUserId(1L, 1L);
         assertThat(itemOptional).isPresent()
-                .hasValueSatisfying(i -> {
-                    assertThat(i.getItemName()).isEqualTo("test");
-                });
+                .hasValueSatisfying(i -> assertThat(i.getItemName()).isEqualTo("test"));
 
-        Optional<Item> itemOptionalEmpty = itemRepository.findById(0L);
+        Optional<Item> itemOptionalEmpty = itemRepository.findByItemIdAndUserId(0L, 1L);
         assertThat(itemOptionalEmpty).isEmpty();
 
         Item item2 = Item.builder()

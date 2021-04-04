@@ -1,5 +1,6 @@
-package com.demo.inventory.configuration;
+package com.demo.inventory.configuration.setup;
 
+import com.demo.inventory.configuration.UserProperties;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;

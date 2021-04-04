@@ -21,7 +21,7 @@ public class SearchService {
 
     public List<ItemNodeResponse> getAllUsersItemNodes(Long userId, String attribute, String search) {
         if (Optional.ofNullable(attribute).isEmpty()) attribute = "";
-        List<Item> items = new ArrayList<>();
+        List<Item> items;
 
         switch (attribute) {
             case "category":

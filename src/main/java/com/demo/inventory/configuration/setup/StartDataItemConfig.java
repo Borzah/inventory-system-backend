@@ -1,4 +1,4 @@
-package com.demo.inventory.configuration;
+package com.demo.inventory.configuration.setup;
 
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.ItemRepository;
@@ -14,7 +14,7 @@ public class StartDataItemConfig {
 
     private final ItemRepository itemRepository;
 
-    public void addStartItemDataIfNeeded() {
+    protected void addStartItemDataIfNeeded() {
             Item computer = Item.builder().itemName("Computer").folderId(null).userId(2L).categoryId(1L).dateAdded(new Timestamp(System.currentTimeMillis())).description("Modern and fast computer.").serialNumber("12345678").itemPrice(999.99f).build();
             Item ukulele = Item.builder().itemName("Ukulele").folderId(null).userId(2L).categoryId(null).dateAdded(new Timestamp(System.currentTimeMillis())).description("Musical instrument.").serialNumber(null).itemPrice(null).build();
             Item cleanCodeBook = Item.builder().itemName("Clean Code Book").folderId(null).userId(2L).categoryId(4L).dateAdded(new Timestamp(System.currentTimeMillis())).description("Book about clean code.").serialNumber(null).itemPrice(12.99f).build();

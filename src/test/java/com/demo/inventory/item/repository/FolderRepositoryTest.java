@@ -49,11 +49,9 @@ public class FolderRepositoryTest {
         Folder folder = new Folder("testParent", null, 1L);
         folderRepository.save(folder);
 
-        Optional<Folder> folderOptional = folderRepository.findById(1L);
+        Optional<Folder> folderOptional = folderRepository.findByFolderIdAndUserId(1L, 1L);
         assertThat(folderOptional).isPresent()
-                .hasValueSatisfying(f -> {
-                    assertThat(f.getFolderName()).isEqualTo("testParent");
-                });
+                .hasValueSatisfying(f -> assertThat(f.getFolderName()).isEqualTo("testParent"));
 
         Folder folder2 = new Folder("testChild", 1L, 1L);
         folderRepository.save(folder2);
@@ -61,7 +59,7 @@ public class FolderRepositoryTest {
         assertThat(result).isNotEmpty();
         assertThat(result.get(0).getFolderName()).isEqualTo("testChild");
 
-        Optional<Folder> folderOptionalEmpty = folderRepository.findById(0L);
+        Optional<Folder> folderOptionalEmpty = folderRepository.findByFolderIdAndUserId(0L, 1L);
         assertThat(folderOptionalEmpty).isEmpty();
 
         Folder folder3 = new Folder("test", null, 1L);

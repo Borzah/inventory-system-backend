@@ -48,14 +48,12 @@ public class CategoryRepositoryTest {
     void shouldAddAndFindCategory() {
         Category category = new Category(1L, "test");
         categoryRepository.save(category);
-        Optional<Category> categoryOptional = categoryRepository.findById(1L);
+        Optional<Category> categoryOptional = categoryRepository.findByCategoryIdAndUserId(1L, 1L);
 
         assertThat(categoryOptional).isPresent()
-                .hasValueSatisfying(c -> {
-                    assertThat(c.getCategoryName()).isEqualTo("test");
-                });
+                .hasValueSatisfying(c -> assertThat(c.getCategoryName()).isEqualTo("test"));
 
-        Optional<Category> categoryOptionalEmpty = categoryRepository.findById(0L);
+        Optional<Category> categoryOptionalEmpty = categoryRepository.findByCategoryIdAndUserId(0L, 1L);
         assertThat(categoryOptionalEmpty).isEmpty();
 
         Category category2 = new Category(1L, "test2");

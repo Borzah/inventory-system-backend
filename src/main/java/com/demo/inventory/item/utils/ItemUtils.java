@@ -1,6 +1,5 @@
 package com.demo.inventory.item.utils;
 
-import com.demo.inventory.exception.AuthorizationException;
 import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
@@ -14,8 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component

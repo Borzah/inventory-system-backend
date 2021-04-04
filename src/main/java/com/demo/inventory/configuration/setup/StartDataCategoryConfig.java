@@ -1,4 +1,4 @@
-package com.demo.inventory.configuration;
+package com.demo.inventory.configuration.setup;
 
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
@@ -13,7 +13,7 @@ public class StartDataCategoryConfig {
 
     private final CategoryRepository categoryRepository;
 
-    public void addStartCategoryDataIfNeeded() {
+    protected void addStartCategoryDataIfNeeded() {
             Category johnElectronics = new Category(2L, "Electronics");
             Category johnTools = new Category(2L, "Tools");
             Category johnMedia = new Category(2L, "Media");

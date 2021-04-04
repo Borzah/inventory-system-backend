@@ -1,4 +1,4 @@
-package com.demo.inventory.configuration;
+package com.demo.inventory.configuration.setup;
 
 import com.demo.inventory.item.model.Image;
 import com.demo.inventory.item.repository.ImageRepository;
@@ -16,7 +16,7 @@ public class StartDataImageConfig {
 
     private final ImageRepository imageRepository;
 
-    public void addStartImageDataIfNeeded() throws IOException {
+    protected void addStartImageDataIfNeeded() throws IOException {
             byte[] computerImageBytes = Files.readAllBytes(Paths.get("src/main/resources/static/assets/computer.jpg"));
             byte[] cleanCodeImageBytes = Files.readAllBytes(Paths.get("src/main/resources/static/assets/cleancode.jpg"));
             byte[] cupImageBytes = Files.readAllBytes(Paths.get("src/main/resources/static/assets/cup.jpg"));

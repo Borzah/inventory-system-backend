@@ -1,4 +1,4 @@
-package com.demo.inventory.configuration;
+package com.demo.inventory.configuration.setup;
 
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.repository.FolderRepository;
@@ -13,7 +13,7 @@ public class StartDataFolderConfig {
 
     private final FolderRepository folderRepository;
 
-    public void addStartFolderDataIfNeeded() {
+    protected void addStartFolderDataIfNeeded() {
             Folder tuba1 = new Folder("Tuba-1", null, 2L);
             Folder tuba2 = new Folder("Tuba-2", null, 2L);
             Folder tuba3 = new Folder("Tuba-3", null, 2L);

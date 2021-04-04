@@ -33,6 +33,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByItemNameAndFolderIdAndUserId(String itemName, Long folderId, Long userId);
 
     // custom queries
+
     @Query("SELECT i FROM Item i INNER JOIN Category c ON i.categoryId=c.categoryId AND i.userId = :userId AND Lower(c.categoryName) LIKE %:search%")
     List<Item> searchForItemsByCategory(Long userId, String search);
 
