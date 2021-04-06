@@ -39,7 +39,3 @@ http://localhost:8080/api/swagger-ui.html
 |------------------|------------|--------|
 |  admin@mail.com  | password   | Admin  |
 |  john@mail.com  | password   | User    |
-|  anna@mail.com  | password   | User    |
-|  mike@mail.com  | password   | User    |
-|  jane@mail.com  | password   | User    |
-
