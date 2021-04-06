@@ -1,12 +1,9 @@
 package com.demo.inventory.data.utils;
 
-import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
 import com.demo.inventory.data.mapper.ItemResponseMapper;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
-import com.demo.inventory.item.dto.FolderDto;
-import com.demo.inventory.item.mapper.CategoryMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Image;

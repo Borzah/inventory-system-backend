@@ -36,12 +36,12 @@ public class InventoryController {
         return inventoryService.getItemResponseByItemId(itemId, auth.getId());
     }
 
-    @GetMapping("user/categories")
+    @GetMapping("categories")
     public Map<String, List<ItemNodeResponse>> getItemsByCategory(@AuthenticationPrincipal InventoryUser auth) {
         return inventoryService.getItemsByCategory(auth.getId());
     }
 
-    @GetMapping("user")
+    @GetMapping("items")
     public List<ItemNodeResponse> getAllUsersItemNodes(@RequestParam(required = false) String attribute,
                                                        @RequestParam(required = false) String search,
                                                        @AuthenticationPrincipal InventoryUser auth) {

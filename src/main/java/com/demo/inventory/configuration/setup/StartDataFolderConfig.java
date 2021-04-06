@@ -27,9 +27,8 @@ public class StartDataFolderConfig {
             Folder karp2 = new Folder("Karp-2", 10L, 2L);
             Folder karp5 = new Folder("Karp-5", 1L, 2L);
             Folder kaust2 = new Folder("Kaust-2", 12L, 2L);
-            Folder box = new Folder("box", null, 3L);
             folderRepository.saveAll(List.of(tuba1, tuba2, tuba3, tuba4, music, discs,
-                    osakond3, ladu6, rida1, kast6, karp2, karp5, kaust2, box));
+                    osakond3, ladu6, rida1, kast6, karp2, karp5, kaust2));
     }
 }
 

@@ -1,6 +1,6 @@
 package com.demo.inventory.utils;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.model.Category;
@@ -23,9 +23,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class ItemUtilsTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private FolderRepository folderRepository;

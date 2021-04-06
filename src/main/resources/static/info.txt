@@ -4,12 +4,3 @@ Admin:
 Users:
 	john@mail.com
 	password
-
-	anna@mail.com
-	password
-
-	mike@mail.com
-	password
-
-	jane@mail.com
-	password

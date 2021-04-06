@@ -3,7 +3,6 @@ package com.demo.inventory.item.repository;
 import com.demo.inventory.item.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,8 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-
-    Item findByItemId(Long itemId);
 
     Optional<Item> findByItemIdAndUserId(Long itemId, Long userId);
 
@@ -29,8 +26,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByUserIdAndDescriptionNotNull(Long userId);
 
     List<Item> findAllByUserIdAndItemPriceNotNull(Long userId);
-
-    List<Item> findAllByItemNameAndFolderIdAndUserId(String itemName, Long folderId, Long userId);
 
     // custom queries
 

@@ -1,6 +1,6 @@
 package com.demo.inventory.data;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.data.mapper.ItemResponseMapper;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.model.Folder;
@@ -19,15 +19,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryUtilsTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
+
     @MockBean
     private ImageRepository imageRepository;
+
     @MockBean
     private CategoryRepository categoryRepository;
+
     @MockBean
     private FolderRepository folderRepository;
+
     @MockBean
     private ItemResponseMapper mapper;
 

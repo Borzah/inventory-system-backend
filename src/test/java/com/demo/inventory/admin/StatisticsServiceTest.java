@@ -2,7 +2,7 @@ package com.demo.inventory.admin;
 
 import com.demo.inventory.admin.dto.UserStatisticsResponse;
 import com.demo.inventory.admin.service.StatisticsService;
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.FolderRepository;
@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class StatisticsServiceTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private UserRepository userRepository;

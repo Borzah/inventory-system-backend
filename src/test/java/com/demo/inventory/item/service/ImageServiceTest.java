@@ -1,6 +1,6 @@
 package com.demo.inventory.item.service;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.mapper.ImageMapper;
 import com.demo.inventory.item.model.Item;
@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class ImageServiceTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private ImageRepository imageRepository;

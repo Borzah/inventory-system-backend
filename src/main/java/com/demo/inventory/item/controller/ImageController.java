@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Secured(Roles.USER)
 @RestController
-@RequestMapping("image")
+@RequestMapping("images")
 @AllArgsConstructor
 public class ImageController {
 

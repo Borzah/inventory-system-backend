@@ -10,14 +10,12 @@ import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-@Slf4j
 public class ItemUtils {
 
     private final FolderRepository folderRepository;

@@ -5,6 +5,8 @@ import com.demo.inventory.item.service.FolderService;
 import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -14,26 +16,28 @@ import java.util.List;
 
 @Secured(Roles.USER)
 @RestController
-@RequestMapping("folder")
+@RequestMapping("folders")
 @AllArgsConstructor
 public class FolderController {
 
     private final FolderService folderService;
 
-    @GetMapping("all")
+    @GetMapping
     public List<FolderDto> getAllUserFolders(@AuthenticationPrincipal InventoryUser auth) {
         return folderService.getAllUserFolders(auth.getId());
     }
 
     @PostMapping
-    public FolderDto addFolder(@Valid @RequestBody FolderDto folderDto,
-                               @AuthenticationPrincipal InventoryUser auth) {
-        return folderService.addFolder(folderDto, auth.getId());
+    public ResponseEntity<FolderDto> addFolder(@Valid @RequestBody FolderDto folderDto,
+                                               @AuthenticationPrincipal InventoryUser auth) {
+        FolderDto folder = folderService.addFolder(folderDto, auth.getId());
+        return new ResponseEntity<>(folder, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{folderId}")
-    public void deleteFolder(@PathVariable Long folderId,
+    public ResponseEntity<Void> deleteFolder(@PathVariable Long folderId,
                              @AuthenticationPrincipal InventoryUser auth) {
         folderService.deleteFolder(folderId, auth.getId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

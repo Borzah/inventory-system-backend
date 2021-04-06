@@ -30,11 +30,6 @@ public class JwtTokenProvider {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public Long getUserIdFromToken(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        return claims.get(USER_ID_KEY, Long.class);
-    }
-
     public String generateToken(InventoryUser userDetails) {
         return doGenerateToken(new HashMap<>(), userDetails.getUsername(), userDetails.getId());
     }

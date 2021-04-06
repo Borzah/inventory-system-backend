@@ -1,9 +1,8 @@
 package com.demo.inventory.data;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
-import com.demo.inventory.data.mapper.FolderResponseMapper;
 import com.demo.inventory.data.service.InventoryService;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.dto.FolderDto;
@@ -29,21 +28,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryServiceTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
+
     @MockBean
     private ItemRepository itemRepository;
+
     @MockBean
     private FolderRepository folderRepository;
+
     @MockBean
     private CategoryRepository categoryRepository;
+
     @MockBean
     private InventoryUtils inventoryUtils;
+
     @MockBean
     private FolderMapper folderMapper;
-    @MockBean
-    private FolderResponseMapper folderResponseMapper;
 
     private InventoryService inventoryService;
 
@@ -54,8 +56,7 @@ public class InventoryServiceTest {
                 folderRepository,
                 categoryRepository,
                 inventoryUtils,
-                folderMapper,
-                folderResponseMapper
+                folderMapper
         );
     }
 
@@ -73,7 +74,7 @@ public class InventoryServiceTest {
         Item item = Item.builder().itemId(1L).itemName("test").dateAdded(date).build();
         ItemNodeResponse itemNode = new ItemNodeResponse(1L, "test");
 
-        when(folderRepository.findById(1L)).thenReturn(Optional.of(folder1));
+        when(folderRepository.findByFolderIdAndUserId(1L, 1L)).thenReturn(Optional.of(folder1));
 
         when(folderRepository.findAllByUserIdAndParentId(1L, 1L)).thenReturn(
                 List.of(folder2, folder3)
@@ -104,15 +105,12 @@ public class InventoryServiceTest {
                 .folders(List.of(folderDto2, folderDto3))
                 .items(List.of(itemNode)).build();
 
-        when(folderResponseMapper.createFolderResponse(
-                1L,
-                null,
-                "My-Items / test1 /",
-                List.of(folderDto2, folderDto3),
-                List.of(itemNode))).thenReturn(expected);
-
         FolderResponse actual = inventoryService.getContentBySection(1L, 1L);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getCurrentFolderId()).isEqualTo(expected.getCurrentFolderId());
+        assertThat(actual.getParentFolderId()).isEqualTo(expected.getParentFolderId());
+        assertThat(actual.getCurrentFolderPathName()).isEqualTo(expected.getCurrentFolderPathName());
+        assertThat(actual.getFolders()).isEqualTo(expected.getFolders());
+        assertThat(actual.getItems()).isEqualTo(expected.getItems());
     }
 }

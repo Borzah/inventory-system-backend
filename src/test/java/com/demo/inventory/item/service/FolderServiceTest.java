@@ -1,6 +1,6 @@
 package com.demo.inventory.item.service;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.item.dto.FolderDto;
 import com.demo.inventory.item.mapper.FolderMapper;
@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 public class FolderServiceTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private FolderRepository folderRepository;

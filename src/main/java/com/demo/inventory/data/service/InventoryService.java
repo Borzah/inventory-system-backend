@@ -3,19 +3,15 @@ package com.demo.inventory.data.service;
 import com.demo.inventory.data.dto.FolderResponse;
 import com.demo.inventory.data.dto.ItemNodeResponse;
 import com.demo.inventory.data.dto.ItemResponse;
-import com.demo.inventory.data.mapper.FolderResponseMapper;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
 import com.demo.inventory.item.dto.FolderDto;
-import com.demo.inventory.item.mapper.CategoryMapper;
 import com.demo.inventory.item.mapper.FolderMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.model.Folder;
-import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
 import com.demo.inventory.item.repository.ItemRepository;
-import com.demo.inventory.item.service.FolderService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +30,6 @@ public class InventoryService {
     private final CategoryRepository categoryRepository;
     private final InventoryUtils inventoryUtils;
     private final FolderMapper folderMapper;
-    private final FolderResponseMapper folderResponseMapper;
 
     public ItemResponse getItemResponseByItemId(Long itemId, Long userId) {
         return itemRepository.findByItemIdAndUserId(itemId, userId)
@@ -70,12 +65,12 @@ public class InventoryService {
             currentFolderPathName = inventoryUtils.getFolderPathName(possibleParents, currentFolder);
         }
 
-        return folderResponseMapper.createFolderResponse(
-                folderId,
-                parentFolderId,
-                currentFolderPathName,
-                folders,
-                items);
+        return FolderResponse.builder()
+                .currentFolderId(folderId)
+                .parentFolderId(parentFolderId)
+                .currentFolderPathName(currentFolderPathName)
+                .folders(folders)
+                .items(items).build();
     }
 
     public Map<String, List<ItemNodeResponse>> getItemsByCategory(Long userId) {

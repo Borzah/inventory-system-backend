@@ -4,17 +4,18 @@ import com.demo.inventory.configuration.UserProperties;
 import com.demo.inventory.user.model.User;
 import com.demo.inventory.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class StartDataUserConfig {
+@Slf4j
+public class StartDataRunner implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -24,8 +25,8 @@ public class StartDataUserConfig {
     private final StartDataItemConfig itemConfig;
     private final StartDataImageConfig imageConfig;
 
-    @PostConstruct
-    private void addStartUserDataIfNeeded() throws IOException {
+    @Override
+    public void run(String... args) throws Exception {
         if (userRepository.findByUsername(userProperties.getAdminUsername()).isEmpty()) {
 
             User admin = new User(
@@ -33,41 +34,21 @@ public class StartDataUserConfig {
                     passwordEncoder.encode(userProperties.getPassword()),
                     userProperties.getAdminRole(),
                     new Timestamp(System.currentTimeMillis())
-                );
+            );
 
             User john = new User(
-                    userProperties.getFirstUsername(),
+                    userProperties.getUserUsername(),
                     passwordEncoder.encode(userProperties.getPassword()),
                     userProperties.getUserRole(),
                     new Timestamp(System.currentTimeMillis())
             );
 
-            User anna = new User(
-                    userProperties.getSecondUsername(),
-                    passwordEncoder.encode(userProperties.getPassword()),
-                    userProperties.getUserRole(),
-                    new Timestamp(System.currentTimeMillis())
-            );
-
-            User mike = new User(
-                    userProperties.getThirdUsername(),
-                    passwordEncoder.encode(userProperties.getPassword()),
-                    userProperties.getUserRole(),
-                    new Timestamp(System.currentTimeMillis())
-            );
-
-            User jane = new User(
-                    userProperties.getFourthUsername(),
-                    passwordEncoder.encode(userProperties.getPassword()),
-                    userProperties.getUserRole(),
-                    new Timestamp(System.currentTimeMillis())
-            );
-
-            userRepository.saveAll(List.of(admin, john, anna, mike, jane));
+            userRepository.saveAll(List.of(admin, john));
             categoryConfig.addStartCategoryDataIfNeeded();
             folderConfig.addStartFolderDataIfNeeded();
             itemConfig.addStartItemDataIfNeeded();
             imageConfig.addStartImageDataIfNeeded();
+            log.info("Start data added");
         }
     }
 }

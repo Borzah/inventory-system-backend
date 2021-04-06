@@ -18,8 +18,6 @@ public class StartDataCategoryConfig {
             Category johnTools = new Category(2L, "Tools");
             Category johnMedia = new Category(2L, "Media");
             Category johnBooks = new Category(2L, "Books");
-            Category annaKitchen = new Category(3L, "Kitchen");
-            Category annaVaria = new Category(3L, "Varia");
-            categoryRepository.saveAll(List.of(johnElectronics, johnTools, johnMedia, johnBooks, annaKitchen, annaVaria));
+            categoryRepository.saveAll(List.of(johnElectronics, johnTools, johnMedia, johnBooks));
     }
 }

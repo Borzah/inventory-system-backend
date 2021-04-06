@@ -1,8 +1,7 @@
 package com.demo.inventory.data;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.data.dto.ItemNodeResponse;
-import com.demo.inventory.data.mapper.FolderResponseMapper;
 import com.demo.inventory.data.service.InventoryService;
 import com.demo.inventory.data.utils.InventoryUtils;
 import com.demo.inventory.item.mapper.FolderMapper;
@@ -28,22 +27,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class InventoryServiceCategoriesTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private ItemRepository itemRepository;
+
     @MockBean
     private FolderRepository folderRepository;
+
     @MockBean
     private CategoryRepository categoryRepository;
+
     @MockBean
     private InventoryUtils inventoryUtils;
+
     @MockBean
     private FolderMapper folderMapper;
-    @MockBean
-    private FolderResponseMapper folderResponseMapper;
 
     private InventoryService inventoryService;
 
@@ -54,8 +55,7 @@ public class InventoryServiceCategoriesTest {
                 folderRepository,
                 categoryRepository,
                 inventoryUtils,
-                folderMapper,
-                folderResponseMapper
+                folderMapper
         );
     }
 

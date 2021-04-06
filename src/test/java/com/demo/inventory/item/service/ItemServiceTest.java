@@ -1,6 +1,6 @@
 package com.demo.inventory.item.service;
 
-import com.demo.inventory.configuration.setup.StartDataUserConfig;
+import com.demo.inventory.configuration.setup.StartDataRunner;
 import com.demo.inventory.item.dto.ItemDto;
 import com.demo.inventory.item.mapper.ItemMapper;
 import com.demo.inventory.item.model.Item;
@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class ItemServiceTest {
 
-    // Added to avoid conflicts with @PostConstruct
+    // Added to avoid errors
     @MockBean
-    private StartDataUserConfig startDataUserConfig;
+    private StartDataRunner startDataRunner;
 
     @MockBean
     private ItemRepository itemRepository;

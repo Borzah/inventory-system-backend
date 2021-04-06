@@ -16,13 +16,7 @@ public class UserProperties {
 
     private String adminUsername;
 
-    private String firstUsername;
-
-    private String secondUsername;
-
-    private String thirdUsername;
-
-    private String fourthUsername;
+    private String userUsername;
 
     private String password;
 

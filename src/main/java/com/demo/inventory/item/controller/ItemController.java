@@ -5,6 +5,8 @@ import com.demo.inventory.item.service.ItemService;
 import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ import javax.validation.Valid;
 
 @Secured(Roles.USER)
 @RestController
-@RequestMapping("item")
+@RequestMapping("items")
 @AllArgsConstructor
 public class ItemController {
 
@@ -26,9 +28,10 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto addItem(@Valid @RequestBody ItemDto itemDto,
-                           @AuthenticationPrincipal InventoryUser auth) {
-        return itemService.addItem(itemDto, auth.getId());
+    public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto,
+                                           @AuthenticationPrincipal InventoryUser auth) {
+        ItemDto item = itemService.addItem(itemDto, auth.getId());
+        return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
 
     @PutMapping("{itemId}")
@@ -39,8 +42,9 @@ public class ItemController {
     }
 
     @DeleteMapping("{itemId}")
-    public void deleteItem(@PathVariable Long itemId,
+    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId,
                            @AuthenticationPrincipal InventoryUser auth) {
         itemService.deleteItem(itemId, auth.getId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

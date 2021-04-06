@@ -5,6 +5,8 @@ import com.demo.inventory.item.service.CategoryService;
 import com.demo.inventory.security.InventoryUser;
 import com.demo.inventory.security.Roles;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +14,23 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @Secured(Roles.USER)
 @RestController
-@RequestMapping("category")
+@RequestMapping("categories")
 @AllArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("all")
+    @GetMapping
     public List<CategoryDto> getAllCategoriesByUserId(@AuthenticationPrincipal InventoryUser auth) {
         return categoryService.getAllCategoriesByUserId(auth.getId());
     }
 
     @PostMapping
-    public CategoryDto addCategory(@Valid @RequestBody CategoryDto categoryDto,
-                                   @AuthenticationPrincipal InventoryUser auth) {
-        return categoryService.addCategory(categoryDto, auth.getId());
+    public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody CategoryDto categoryDto,
+                                                   @AuthenticationPrincipal InventoryUser auth) {
+        CategoryDto category = categoryService.addCategory(categoryDto, auth.getId());
+        return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 }

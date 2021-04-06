@@ -23,7 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtRequestFilter jwtRequestFilter;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    // rename, get rid of "my"
     private final InventoryUserDetailsService inventoryUserDetailsService;
 
     public SecurityConfig(JwtRequestFilter jwtRequestFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint, InventoryUserDetailsService inventoryUserDetailsService) {
@@ -39,8 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // TODO what is csrf
-        // TODO what is cors
         http
                 .csrf().disable()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
@@ -62,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .ignoring()
                 .antMatchers(
-                        "/user/login",
-                        "/user/register");
+                        "/users/login",
+                        "/users/register");
     }
 
     @Bean

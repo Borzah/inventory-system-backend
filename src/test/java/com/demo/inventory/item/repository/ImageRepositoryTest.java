@@ -56,17 +56,15 @@ public class ImageRepositoryTest {
     }
 
     @Test
-    void shouldAddImage() throws IOException {
-        byte[] testImageBytes = Files.readAllBytes(Paths.get("src/test/resources/assets/wire.jpg"));
+    void shouldAddImage()  {
+        byte[] testImageBytes = new byte[]{};
         Image image = new Image(1L, testImageBytes);
 
         imageRepository.save(image);
         Optional<Image> imageOptional = imageRepository.findById(1L);
 
         assertThat(imageOptional).isPresent()
-                .hasValueSatisfying(i -> {
-                    assertThat(i.getImageBytes()).isEqualTo(testImageBytes);
-                });
+                .hasValueSatisfying(i -> assertThat(i.getImageBytes()).isEqualTo(testImageBytes));
 
         Optional<Image> imageOptionalEmpty = imageRepository.findById(2L);
         assertThat(imageOptionalEmpty).isEmpty();
