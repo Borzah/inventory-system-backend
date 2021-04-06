@@ -24,11 +24,12 @@ public class UserService {
         if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {
             throw new UserException("User with this username already exists!");
         }
-        User user = new User();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setRole(DbRole.USER);
-        user.setDateRegistered(new Timestamp(System.currentTimeMillis()));
+        User user = User.builder()
+                .username(registerDto.getUsername())
+                .password(passwordEncoder.encode(registerDto.getPassword()))
+                .role(DbRole.USER)
+                .dateRegistered(new Timestamp(System.currentTimeMillis()))
+                .build();
         userRepository.save(user);
     }
 }

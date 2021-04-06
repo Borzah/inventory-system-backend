@@ -11,15 +11,6 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = AuthorizationException.class)
-    public ResponseEntity<Object> handleAuthorizationException(AuthorizationException e) {
-        ApiException apiException = new ApiException(
-                e.getMessage(),
-                HttpStatus.FORBIDDEN,
-                ZonedDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.FORBIDDEN);
-    }
-
     @ExceptionHandler(value = FolderException.class)
     public ResponseEntity<Object> handleFolderException(FolderException e) {
         ApiException apiException = new ApiException(

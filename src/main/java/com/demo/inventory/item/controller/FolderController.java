@@ -36,7 +36,7 @@ public class FolderController {
 
     @DeleteMapping("{folderId}")
     public ResponseEntity<Void> deleteFolder(@PathVariable Long folderId,
-                             @AuthenticationPrincipal InventoryUser auth) {
+                                             @AuthenticationPrincipal InventoryUser auth) {
         folderService.deleteFolder(folderId, auth.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -1,9 +1,7 @@
 package com.demo.inventory.user.model;
 
 import com.demo.inventory.security.DbRole;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +11,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "App_user")
 @Entity
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id

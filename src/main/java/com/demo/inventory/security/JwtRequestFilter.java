@@ -51,6 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
+        // check if user is currently logged in with this token
         if (!userTokenHolder.tokenInWhiteList(jwtToken)) {
             chain.doFilter(request, response);
             return;

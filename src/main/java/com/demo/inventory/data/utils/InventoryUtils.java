@@ -69,11 +69,13 @@ public class InventoryUtils {
     }
 
     public String getFolderPathName(List<Folder> searchableSpace, Folder currentFolder) {
+
         List<Folder> result = new ArrayList<>();
         List<String> resultString = new ArrayList<>();
         result.add(currentFolder);
         resultString.add(currentFolder.getFolderName());
 
+        // Get path from start to current folder as list
         int listLength = searchableSpace.size();
         for (int i = 0; i < listLength; i++) {
             for (Folder f: searchableSpace) {
@@ -86,6 +88,7 @@ public class InventoryUtils {
             }
         }
 
+        // create path string
         Collections.reverse(resultString);
         StringBuilder sb = new StringBuilder();
         sb.append(ROOT_NAME);

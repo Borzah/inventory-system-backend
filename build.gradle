@@ -25,6 +25,8 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 
+	implementation 'org.springframework.security:spring-security-test'
+
 	implementation 'io.swagger.core.v3:swagger-core'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
 

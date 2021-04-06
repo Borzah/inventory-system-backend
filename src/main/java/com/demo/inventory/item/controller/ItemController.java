@@ -43,7 +43,7 @@ public class ItemController {
 
     @DeleteMapping("{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long itemId,
-                           @AuthenticationPrincipal InventoryUser auth) {
+                                           @AuthenticationPrincipal InventoryUser auth) {
         itemService.deleteItem(itemId, auth.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

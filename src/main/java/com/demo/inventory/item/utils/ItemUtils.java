@@ -9,17 +9,30 @@ import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.repository.FolderRepository;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
-@AllArgsConstructor
+@Getter
 public class ItemUtils {
 
     private final FolderRepository folderRepository;
     private final CategoryRepository categoryRepository;
+
+    public ItemUtils(FolderRepository folderRepository, CategoryRepository categoryRepository) {
+        this.folderRepository = folderRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Value("${file-upload.max-file-size}")
+    private Long maxFileSize;
+
+    @Value("#{${file-upload.allowed-file-types}}")
+    private List<String> allowedFileTypes;
 
     public void checkUserAddingItemOrFolderIntoTheirFolder(Long folderId, Long userId) {
         Optional<Folder> result = folderRepository.findByFolderIdAndUserId(folderId, userId);

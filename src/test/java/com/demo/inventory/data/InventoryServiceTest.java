@@ -75,15 +75,12 @@ public class InventoryServiceTest {
         ItemNodeResponse itemNode = new ItemNodeResponse(1L, "test");
 
         when(folderRepository.findByFolderIdAndUserId(1L, 1L)).thenReturn(Optional.of(folder1));
-
         when(folderRepository.findAllByUserIdAndParentId(1L, 1L)).thenReturn(
                 List.of(folder2, folder3)
         );
-
         when(itemRepository.findAllByUserIdAndFolderId(1L, 1L)).thenReturn(
                 List.of(item)
         );
-
         when(inventoryUtils.createItemNodeResponse(item)).thenReturn(
                 itemNode
         );

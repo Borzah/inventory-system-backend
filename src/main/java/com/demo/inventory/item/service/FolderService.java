@@ -2,7 +2,6 @@ package com.demo.inventory.item.service;
 
 import com.demo.inventory.exception.FolderException;
 import com.demo.inventory.exception.RequestedObjectNotFoundException;
-import com.demo.inventory.item.mapper.CategoryMapper;
 import com.demo.inventory.item.mapper.FolderMapper;
 import com.demo.inventory.item.utils.ItemUtils;
 import com.demo.inventory.item.dto.FolderDto;

@@ -27,7 +27,6 @@ public class CategoryServiceTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
-
     @MockBean
     private ItemUtils itemUtils;
 

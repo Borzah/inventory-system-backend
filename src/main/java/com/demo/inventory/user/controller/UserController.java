@@ -34,14 +34,14 @@ public class UserController {
         return authService.login(loginDto);
     }
 
-    @Secured({ "ROLE_USER", "ROLE_ADMIN" })
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping("logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal InventoryUser auth) {
         authService.logout(auth.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Secured({ "ROLE_USER", "ROLE_ADMIN" })
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("data")
     public LoginResponse getUserDataByToken(@AuthenticationPrincipal InventoryUser auth) {
         return authService.getUserDataByToken(auth.getId());

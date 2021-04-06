@@ -3,7 +3,6 @@ package com.demo.inventory.item.service;
 import com.demo.inventory.exception.ItemException;
 import com.demo.inventory.item.dto.CategoryDto;
 import com.demo.inventory.item.mapper.CategoryMapper;
-import com.demo.inventory.item.mapper.ItemMapper;
 import com.demo.inventory.item.model.Category;
 import com.demo.inventory.item.repository.CategoryRepository;
 import com.demo.inventory.item.utils.ItemUtils;

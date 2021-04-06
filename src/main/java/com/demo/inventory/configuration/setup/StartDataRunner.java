@@ -48,6 +48,7 @@ public class StartDataRunner implements CommandLineRunner {
             folderConfig.addStartFolderDataIfNeeded();
             itemConfig.addStartItemDataIfNeeded();
             imageConfig.addStartImageDataIfNeeded();
+
             log.info("Start data added");
         }
     }

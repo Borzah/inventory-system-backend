@@ -7,6 +7,8 @@ import java.util.HashMap;
 @Component
 public class UserTokenHolder {
 
+    // holds token of logged in user
+    // when logging out, old token gets invalid
     private final HashMap<Long, String> tokenHolder;
 
     public UserTokenHolder() {

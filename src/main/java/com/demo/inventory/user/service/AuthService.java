@@ -36,6 +36,7 @@ public class AuthService {
 
         InventoryUser inventoryUser = (InventoryUser) authenticate.getPrincipal();
         String token = jwtTokenProvider.generateToken(inventoryUser);
+
         userTokenHolder.addToken(inventoryUser.getId(), token);
 
         return LoginResponse.builder()
