@@ -1,6 +1,7 @@
 package com.demo.inventory.item.repository;
 
 import com.demo.inventory.item.model.Category;
+import com.demo.inventory.item.model.Folder;
 import com.demo.inventory.item.model.Item;
 import com.demo.inventory.security.DbRole;
 import com.demo.inventory.user.model.User;
@@ -28,6 +29,9 @@ public class ItemRepositoryQueryTest {
     CategoryRepository categoryRepository;
 
     @Autowired
+    FolderRepository folderRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     @BeforeEach
@@ -42,6 +46,9 @@ public class ItemRepositoryQueryTest {
 
         Category category = new Category(1L, "testCategory");
         categoryRepository.save(category);
+
+        Folder folder = Folder.builder().folderName("testFolder").userId(1L).build();
+        folderRepository.save(folder);
     }
 
     @AfterEach
@@ -55,7 +62,7 @@ public class ItemRepositoryQueryTest {
     void shouldValidateCustomQueries() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Item item = Item.builder().itemName("testName").userId(1L).categoryId(1L)
-                .description("testDescription").serialNumber("12345").dateAdded(timestamp)
+                .description("testDescription").folderId(1L).serialNumber("12345").dateAdded(timestamp)
                 .itemPrice(12.99f).build();
         itemRepository.save(item);
 

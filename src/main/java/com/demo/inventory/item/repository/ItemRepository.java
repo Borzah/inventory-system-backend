@@ -44,12 +44,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("SELECT i FROM Item i WHERE i.userId = :userId AND CONCAT(i.itemPrice, '') LIKE %:search%")
     List<Item> searchForItemPriceAndUserId(String search, Long userId);
 
-    @Query("SELECT DISTINCT i FROM Item i, Category c " +
+    @Query("SELECT DISTINCT i FROM Item i, Category c, Folder f " +
         "WHERE i.userId=:userId AND " +
         "(Lower(i.itemName) LIKE %:search% " +
         "OR Lower(i.serialNumber) LIKE %:search% " +
         "OR Lower(i.description) LIKE %:search% " +
         "OR CONCAT(i.itemPrice, '') LIKE %:search% " +
-        "OR c.categoryId = i.categoryId AND Lower(c.categoryName) LIKE %:search%)")
+        "OR c.categoryId = i.categoryId AND Lower(c.categoryName) LIKE %:search% " +
+        "OR f.folderId = i.folderId AND Lower(f.folderName) LIKE %:search%)")
     List<Item> searchForItemsByALlFields(Long userId, String search);
 }
