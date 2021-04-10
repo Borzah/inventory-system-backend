@@ -27,10 +27,15 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByUserIdAndItemPriceNotNull(Long userId);
 
+    List<Item> findAllByUserIdAndFolderIdNotNull(Long userId);
+
     // custom queries
 
     @Query("SELECT i FROM Item i INNER JOIN Category c ON i.categoryId=c.categoryId AND i.userId = :userId AND Lower(c.categoryName) LIKE %:search%")
     List<Item> searchForItemsByCategory(Long userId, String search);
+
+    @Query("SELECT i FROM Item i INNER JOIN Folder f ON i.folderId=f.folderId AND i.userId = :userId AND Lower(f.folderName) LIKE %:search%")
+    List<Item> searchForItemsByFolder(Long userId, String search);
 
     @Query("SELECT i FROM Item i WHERE i.userId = :userId AND Lower(i.serialNumber) LIKE %:search%")
     List<Item> searchForSerialNumberContainingAndUserId(String search, Long userId);
@@ -43,14 +48,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("SELECT i FROM Item i WHERE i.userId = :userId AND CONCAT(i.itemPrice, '') LIKE %:search%")
     List<Item> searchForItemPriceAndUserId(String search, Long userId);
-
-    @Query("SELECT DISTINCT i FROM Item i, Category c, Folder f " +
-        "WHERE i.userId=:userId AND " +
-        "(Lower(i.itemName) LIKE %:search% " +
-        "OR Lower(i.serialNumber) LIKE %:search% " +
-        "OR Lower(i.description) LIKE %:search% " +
-        "OR CONCAT(i.itemPrice, '') LIKE %:search% " +
-        "OR c.categoryId = i.categoryId AND Lower(c.categoryName) LIKE %:search% " +
-        "OR f.folderId = i.folderId AND Lower(f.folderName) LIKE %:search%)")
-    List<Item> searchForItemsByALlFields(Long userId, String search);
 }

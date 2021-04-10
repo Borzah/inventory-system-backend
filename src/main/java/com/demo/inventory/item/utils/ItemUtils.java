@@ -52,8 +52,8 @@ public class ItemUtils {
     }
 
     public void checkNamingRegex(String naming) {
-        if (naming.contains("_")) {
-            throw new ItemException("Attribute name cannot contain '_' sign");
+        if (naming.contains("_") || naming.contains("/")) {
+            throw new ItemException("Attribute name cannot contain '_' and '/' signs");
         }
     }
 

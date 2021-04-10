@@ -50,16 +50,16 @@ public class SearchService {
                     items = itemRepository.findAllByUserIdAndItemPriceNotNull(userId);
                 }
                 break;
-            case "name":
+            case "folder":
                 if (Optional.ofNullable(search).isPresent()) {
-                    items = itemRepository.searchForItemNameContainingAndUserId(search.toLowerCase(), userId);
+                    items = itemRepository.searchForItemsByFolder(userId, search.toLowerCase());
                 } else {
-                    items = itemRepository.findAllByUserId(userId);
+                    items = itemRepository.findAllByUserIdAndFolderIdNotNull(userId);
                 }
                 break;
             default:
                 if (Optional.ofNullable(search).isPresent()) {
-                    items = itemRepository.searchForItemsByALlFields(userId, search.toLowerCase());
+                    items = itemRepository.searchForItemNameContainingAndUserId(search.toLowerCase(), userId);
                 } else {
                     items = itemRepository.findAllByUserId(userId);
                 }

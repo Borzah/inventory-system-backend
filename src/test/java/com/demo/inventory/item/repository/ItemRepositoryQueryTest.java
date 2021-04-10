@@ -78,6 +78,12 @@ public class ItemRepositoryQueryTest {
         assertThat(findByCategoryResult.get(0).getCategoryId()).isEqualTo(1L);
         assertThat(findByCategoryResultEmpty).isEmpty();
 
+        List<Item> findByFolderResult = itemRepository.searchForItemsByFolder(1L, "fol");
+        List<Item> findByFolderResultEmpty = itemRepository.searchForItemsByFolder(1L, "xz");
+        assertThat(findByFolderResult).isNotEmpty();
+        assertThat(findByCategoryResult.get(0).getFolderId()).isEqualTo(1L);
+        assertThat(findByFolderResultEmpty).isEmpty();
+
         List<Item> findBySerialNumberResult = itemRepository.searchForSerialNumberContainingAndUserId("123", 1L);
         List<Item> findBySerialNumberResultEmpty = itemRepository.searchForSerialNumberContainingAndUserId("99", 1L);
         assertThat(findBySerialNumberResult).isNotEmpty();
@@ -95,12 +101,5 @@ public class ItemRepositoryQueryTest {
         assertThat(findByPriceResult).isNotEmpty();
         assertThat(findByPriceResult.get(0).getItemPrice()).isEqualTo(12.99f);
         assertThat(findByPriceResultEmpty).isEmpty();
-
-        List<Item> findByAllFieldsResult = itemRepository.searchForItemsByALlFields(1L, "te");
-        List<Item> findByAllFieldsResultEmpty = itemRepository.searchForItemsByALlFields(1L, "xz");
-        assertThat(findByAllFieldsResult).isNotEmpty();
-        assertThat(findByAllFieldsResult.get(0).getItemName()).isEqualTo("testName");
-        assertThat(findByAllFieldsResultEmpty).isEmpty();
-
     }
 }

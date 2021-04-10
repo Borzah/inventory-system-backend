@@ -85,6 +85,6 @@ public class ItemUtilsTest {
     void shouldNotValidateNameTest() {
         assertThatThrownBy(() -> itemUtils.checkNamingRegex("te_st"))
                 .isInstanceOf(ItemException.class)
-                .hasMessageContaining("Attribute name cannot contain '_' sign");
+                .hasMessageContaining("Attribute name cannot contain '_' and '/' signs");
     }
 }
