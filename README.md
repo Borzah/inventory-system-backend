@@ -11,7 +11,19 @@ docker-compose up
 ## Get frontend up and running
 [Clone frontend from here](https://github.com/borzah/inventory-system-frontend)
 
-### In case of liquibase checksum error
+## Swagger documentation
+
+http://localhost:8080/api/swagger-ui.html
+
+
+### Test users:
+
+| Username         |   Password | Role   |
+|------------------|------------|--------|
+|  admin@mail.com  | password   | Admin  |
+|  john@mail.com  | password   | User    |
+
+## In case of liquibase checksum error
 
 Try following gradle liquibase commands:
 
@@ -27,15 +39,3 @@ docker-compose down
 
 docker-compose up
 ```
-
-## Swagger documentation
-
-http://localhost:8080/api/swagger-ui.html
-
-
-### Test users:
-
-| Username         |   Password | Role   |
-|------------------|------------|--------|
-|  admin@mail.com  | password   | Admin  |
-|  john@mail.com  | password   | User    |
